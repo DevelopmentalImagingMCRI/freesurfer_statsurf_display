@@ -12,6 +12,7 @@ These options are name/value pairs that can be used in all plot types.
 * The following options apply to the text annotation of highlighted regions; requires `FreesurferSeedType` to be either 'aparc' or 'dkt'
 ** 'UseShortLabels', (logical): whether to use abbreviated labels located on top of the regions rather than use boxes and arrows. Additionally, if 'UseShortLabels' is true, a list of regions highlighted will be printed with their full names in the command window.
 ** 'NoLabels', (logical): if this is true, no label annotations will be present, false by default
+** 'SurfType', (string): Surface type to use, 'inflated' for the inflated surface, 'white' for the white matter surface, 'pial' for the pial surface. 'inflated' is the default and the only one that will be annotated.
 
 # Examples of long and short labels
 
