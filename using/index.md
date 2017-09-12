@@ -37,7 +37,7 @@ The <I>p</I>-value plot is intended to colour statistically significant regions 
 
 ### Example
 
-```Matlab
+```matlab
 P = cell(1, 2);
 T = cell(1, 2);
 
