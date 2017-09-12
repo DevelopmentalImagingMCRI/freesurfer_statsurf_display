@@ -13,9 +13,10 @@ h1, h2, h3, h4, body, .main {
   padding: 10px;
 }
  
-.content, code {
-  background: gray;
+.content, highlight {
+  background: #DDD;
 }
+
 ul {
   margin: 0;
   padding: 0;
