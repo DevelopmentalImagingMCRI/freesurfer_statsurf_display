@@ -13,7 +13,7 @@ The source code must be fetched using _git_, and there are several steps. Type t
 a terminal. These commands fetch the freesurfer_statsurf_display code.
 
 ``` bash
-git clone https://github.com/chrisadamsonmcri/freesurfer_statsurf_display.git
+git clone https://github.com/DevelopmentalImagingMCRI/freesurfer_statsurf_display.git
 ```
 
 Updates to freesurfer_statsurf_display can be fetched using
