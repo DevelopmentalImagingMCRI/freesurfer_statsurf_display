@@ -27,6 +27,26 @@ The non-"Mask" arguments `PValues, TValues, Values, RSQ, RegionMask, EffectSizes
 
 [Common name/value options:](commonoptions) There are a number of NAME/VALUE options that are common to all plot types. 
 
+## Saving figures
+
+Use the following function to save a PNG file of the current figure: `freesurfer_statsurf_savefig(PNGName)`
+
+### Example
+
+~~~matlab
+P = cell(1, 2);
+T = cell(1, 2);
+
+for z = 1:2
+	P{z} = rand(31, 1) * 0.075;
+	T{z} = rand(31, 1) * 5 - 3;
+end
+
+freesurfer_statsurf_p(P, T, 'dkt');
+freesurfer_statsurf_savefig('example_random_p.png')
+
+~~~
+
 # Detailed synopsis
 
 ## P-value display
