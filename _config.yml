@@ -1,9 +1,9 @@
-name: MANTiS instructions
+name: freesurfer_statsurf_display instructions
 markdown: kramdown
 
 kramdown:
   input: GFM
   hard_wrap: false
 
-baseurl: /mantis
+baseurl: /freesurfer_statsurf_display
 highlighter: rouge
