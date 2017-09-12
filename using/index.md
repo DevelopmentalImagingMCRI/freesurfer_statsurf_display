@@ -25,7 +25,7 @@ The non-"Mask" arguments `PValues, TValues, Values, RSQ, RegionMask, EffectSizes
 
 ## NAME/VALUE OPTIONS
 
-There are a number of NAME/VALUE options that are common to all plot types. 
+[Common name/value options:](commonoptions) There are a number of NAME/VALUE options that are common to all plot types. 
 
 # Detailed synopsis
 
@@ -37,7 +37,7 @@ The <I>p</I>-value plot is intended to colour statistically significant regions 
 
 ### P-value plot NAME/VALUE arguments
 
-* 'GroupLabels' (cell array of strings) [2]: labels for the two groups, {'Group 1', 'Group 2'} by default
+* 'GroupLabels', {'Group 1', 'Group 2'}: labels for the two groups, {'Group 1', 'Group 2'} by default
 
 ### Example
 
@@ -64,8 +64,8 @@ The variable `ValuesMask` contains logical vectors indicating which regions shou
 
 ### P-value plot NAME/VALUE arguments
 
-* 'ScalarName' (string): the name of the scalar to be displayed, used as a legend labels
-* 'ValueLimits' [2]: minimum and maximum values to plot, if not given will be set according to `Values`
+* 'ScalarName', (string): the name of the scalar to be displayed, used as a legend labels
+* 'ValueLimits', [Low High]: minimum and maximum values to plot, if not given will be set according to `Values`
 
 ### Example
 
@@ -75,7 +75,7 @@ ValuesMask = cell(1, 2);
 
 for z = 1:2
 	Values{z} = rand(31, 1) * 5 - 3;
-	ValuesMask{z} = rand(31, 1) > 0.5;
+	ValuesMask{z} = true(31, 1);
 end
 
 freesurfer_statsurf_scalar(Values, ValuesMask, 'dkt')
@@ -83,7 +83,72 @@ freesurfer_statsurf_scalar(Values, ValuesMask, 'dkt')
 
 ![Image of scalar-value plot](img/parc_dkt_scalar.png)
 
+## R squared display
 
-* R squared: `freesurfer_statsurf_rsq(RSQ, RSQMask, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
-* Effect sizes: `freesurfer_statsurf_effectsize(EffectSizes, EffectSizesMask, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
-* Freesurfer colours: `freesurfer_statsurf_fsrgb(RegionMask, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
+`freesurfer_statsurf_rsq(RSQ, RSQMask, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
+
+This plot displays values with a colour scheme that ranges from 0 to 1, which is suitable for R squared plots. The values are given in the RSQ argument and the mask in RSQMask determines which regions are coloured and which ones are not.
+
+### R squared plot NAME/VALUE arguments
+
+* 'ScalarName', (string): the name of the scalar to be displayed if not r^2, '\itr^2' by default
+
+### Example
+
+~~~matlab
+RSQ = cell(1, 2);
+RSQMask = cell(1, 2);
+
+for z = 1:2
+	RSQ{z} = rand(31, 1);
+	RSQMask{z} = true(31, 1);
+end
+
+freesurfer_statsurf_rsq(RSQ, RSQMask, 'dkt')
+~~~
+
+![Image of R squared-value plot](img/parc_dkt_rsq.png)
+
+## Effect size display
+
+This plot is intended to display effect sizes. The main aspect of this plot is that "S", "M" and "L" are placed on the legend to indicate small, medium and large effect size values.
+
+### Effect size plot NAME/VALUE arguments
+
+* 'ScalarName', (string): the name of the effect. Used to annotated the legend. '\itd' by default for Cohen's d.
+* 'SmallMediumLargeEffectSize' [3]: SmallMediumLargeEffectSize(1) small, SmallMediumLargeEffectSize(2) medium, SmallMediumLargeEffectSize(3) large effect sizes. `[0.2, 0.5, 0.8]` by default.
+* 'LargestEffectSize' [1]: the largest effect size to plot, larger values will be clamped. 1.5 by default
+
+### Example
+
+~~~matlab
+EffectSizes = cell(1, 2);
+EffectSizesMask = cell(1, 2);
+
+for z = 1:2
+	EffectSizes{z} = rand(31, 1);
+	EffectSizesMask{z} = true(31, 1);
+end
+
+freesurfer_statsurf_effectsize(EffectSizes, EffectSizesMask, 'dkt')
+~~~
+
+![Image of effect size-value plot](img/parc_dkt_effectsize.png)
+
+## Freesurfer colour plot
+
+This plot displays regions with the Freesurfer colour schemes, see `FreeSurferColorLUT.txt` in `$FREESURFER_HOME`. Only a mask is required as an argument for this plot type indicating which regions to colour.
+
+### Example
+
+~~~matlab
+RegionMask = cell(1, 2);
+
+for z = 1:2
+	RegionMask{z} = true(31, 1);
+end
+
+freesurfer_statsurf_fsrgb(RegionMask, 'dkt')
+~~~
+
+![Image of freesurfer RGB plot](img/parc_dkt_fsrgb.png)
