@@ -35,7 +35,9 @@ There are a number of NAME/VALUE options that are common to all plot types.
 
 The <I>p</I>-value plot is intended to colour statistically significant regions after hypothesis testing. The `PValues` argument contains the <I>p</I>-values for each region. Regions that have p < 0.05 will be coloured, or grey otherwise. The `TValues` contains the values of the test statistic. The sign of the test statistic, based on a 2-group test, values will be used to separate "Group 1 > Group 2" (positive test statistic) and "Group 2 > Group 1" (negative test statistic).
 
-```
+### Example
+
+```Matlab
 P = cell(1, 2);
 T = cell(1, 2);
 
