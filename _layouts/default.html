@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset=utf-8 />
+  <title> {% if page.title %} {{ page.title }} | {% endif %} MANTiS
+neonate tissue segmentation </title>
+  <link href='//fonts.googleapis.com/css?family=Roboto+Slab:300,400|Roboto:300,400,700,400italic,700italic,500' rel=stylesheet type='text/css' media=all>
+
+  <link rel="stylesheet" href="{{ site.baseurl}}/css/style.css" />
+</head>
+<body>
+ 
+  <div id="main">
+ 
+    <header>
+      <h1> MANTiS neonate tissue segmentation </h1>
+    </header>
+ 
+    <nav role="navigation">
+      <ul>
+        <li><a href="{{ site.baseurl }}{{ post.url }}/">Home</a></li>
+        <li><a href="{{ site.baseurl }}{{ post.url }}/installation/">Installation</a></li>
+        <li><a href="{{ site.baseurl }}{{ post.url }}/using">Using</a></li>
+        <li><a href="{{ site.baseurl }}{{ post.url }}/referencing">Citing</a></li>
+        <li><a href="{{ site.baseurl }}{{ post.url }}/licensing">Licensing</a></li>
+        <li><a href="{{ site.baseurl }}{{ post.url }}/contact">Contact</a></li>
+      </ul>
+    </nav>
+ 
+    {{ content }}
+ 
+    <footer>
+      <p>@copy; Developmental Imaging Group, MCRI</p>
+    </footer>
+ 
+  </div>
+</body>
+</html>

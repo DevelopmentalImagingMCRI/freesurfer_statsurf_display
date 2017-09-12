@@ -1,0 +1,38 @@
+---
+layout: default
+---
+<section role="banner">
+  <img src="{{ site.baseurl }}{{ post.url }}/img/v2.png" />
+</section>
+ 
+<section class="content">
+Welcome to freesurfer_statsurf_display.
+
+freesurfer_statsurf_display contains a collection of scripts to display
+Freesurfer surfaces with its cortical parcellations coloured for rapid figure generation in MATLAB.
+
+<P>Freesurfer 6 produces cortical parcellations. This collection of functions displays
+the average surfaces and colours the regions of the cortical parcellations as a figure in MATLAB. The following
+colouring schemes are supported:
+<UL>
+<LI>freesurfer RGB values
+<LI><I>p</I>-values, with sign determined by corresponding test statistic values
+<LI>effect sizes
+<LI>r squared
+<LI>arbitrary scalars
+</UL>
+
+<P> The folowing parcellation schemes are supported:
+<UL>
+<LI><B>Desikan-Killiany</B>: 
+<LI><B>Desikan-Killiany-Tourville</B>:
+<LI><B>Destrieux</B>: 
+
+For the Desikan-Killiany and Desikan-Killiany-Tourville schemes, the highlighted regions are annotated
+with either their full names or shortened names. Highlighted regions will either have significant <I>p</I>-values
+for the other plots, user-specified masks can be supplied to select regions to colour and annotate.
+
+<P>The plots are customisable with options to change the title, legend name, group names (p-value plot).
+
+</p> 
+</section>

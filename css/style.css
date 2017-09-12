@@ -1,0 +1,95 @@
+h1, h2, h3, h4, body, .main {
+  font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
+  src: local("Roboto Slab Light"), local("RobotoSlab-Light"), url("https://fonts.gstatic.com/s/robotoslab/v6/dazS1PrQQuCxC3iOAJFEJUo2lTMeWA_kmIyWrkNCwPc.woff2") format("woff2");
+  color: #646B74;
+}
+
+
+.content, body {
+  background: white;
+  font-size: 14px;
+  line-height: 1.7;							    
+  font-style: normal;
+  padding: 10px;
+}
+ 
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+a {
+  color: #00728E;
+  text-decoration: none;
+}
+ 
+a:hover {
+  color: #00728E;
+  text-decoration: underline;
+}
+ 
+#main {
+  width: 825px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 1);
+}
+header {
+  padding: 0 10px;
+  overflow: hidden;
+}
+h1, h2 {
+  font-style: normal;
+  font-weight: 300;
+  line-height: 1.2;
+  margin: 0px;
+  color: #30363E;
+}
+
+h1 {
+    font-size: 36px;
+    
+}
+h2 {
+  margin: 0px;
+  text-align: left;
+  font-size: 30px;
+}
+
+nav ul, ul.entries {
+  list-style-type: none;
+}
+nav li a {
+  float: left;
+  margin: 10px; 
+  color: #00AFDB;
+}
+
+ul.entries li {
+  position: relative;
+  margin: 20px auto;
+  padding: 20px;
+  background: #ececec;
+  width: 600px;
+}
+ 
+ul.entries img {
+  width: 600px;
+}
+ 
+ul.entries li h3 {
+  position: absolute;
+  bottom: -18px;
+  left: 17px;
+  font-size: 2em;
+}
+ul.entries a {
+  color: #ececec;
+}
+ul.entries a:hover {
+  color: #00728E;
+}
+ 
+footer {
+  font-size: 0.65em;
+  text-align: center;
+}
