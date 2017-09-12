@@ -21,7 +21,7 @@ The arguments `PValues, TValues, Values, ValuesMask, RSQ, RSQMask, RegionMask, E
 * 'dkt': Desikan-Killiany-Tourville, 31 elements per hemisphere, lable names in seedtype_dkt.txt
 * 'aparc.a2009s': Destreiux, 75 elements per hemisphere, lable names in seedtype_aparc.a2009s.txt
 
-The non-"Mask" arguments `PValues, TValues, Values, RSQ, RegionMask, EffectSizes` contain values for the relevant and may be any numeric type. The "Mask" arguments `ValuesMask, RSQMask, RegionMask, EffectSizesMask` must be of type `logical` such that only elements that are true will be coloured, elements that are false will be grey.
+The non-"Mask" arguments `PValues, TValues, Values, RSQ, RegionMask, EffectSizes` contain values for the relevant and may be any numeric type. The "Mask" arguments `ValuesMask, RSQMask, RegionMask, EffectSizesMask` must be of type `logical` such that only elements that are true will be coloured, elements that are false will be grey. Any of the "Mask" arguments can be given as an empty vector `[]` in which case all regions will be displayed.
 
 ## NAME/VALUE OPTIONS
 
