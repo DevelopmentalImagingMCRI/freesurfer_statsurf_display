@@ -25,7 +25,7 @@ These options are name/value pairs that can be used in all plot types.
 
 The following will have been printed in the command window:
 
-```
-CAC: Caudal anterior cingulate, CMF: Caudal middle frontal, CUN: Cuneus, ENT: Entorhinal, FUS: Fusiform, INFP: Inferior parietal, INS: Insula, ISTC: Isthmus cingulate, IT: Inferior temporal, LIN: Lingual, LOCC: Lateral occipital, LORB: Lateral orbito-frontal, MORB: Medial orbito-frontal, MT: Middle temporal, PARC: Paracentral lobule, PARH: Parahippocampal, PC: Posterior cingulate, PCAL: Pericalcarine, PCUN: Precuneus, POPE: Pars opercularis, PORB: Pars orbitalis, PREC: Precentral, PSTS: Postcentral, PTRI: Pars triangularis, RAC: Rostral anterior cingulate, RMF: Rostral middle frontal, SF: Superior frontal, SMAR: Supramarginal, SP: Superior parietal, ST: Superior temporal, TT: Transverse temporal
-```
 
+CAC: Caudal anterior cingulate, CMF: Caudal middle frontal, CUN: Cuneus, ENT: Entorhinal, FUS: Fusiform, INFP: Inferior parietal, INS: Insula, ISTC: Isthmus cingulate, IT: Inferior temporal, LIN: Lingual, LOCC: Lateral occipital, LORB: Lateral orbito-frontal, MORB: Medial orbito-frontal, MT: Middle temporal, PARC: Paracentral lobule, PARH: Parahippocampal, PC: Posterior cingulate, PCAL: Pericalcarine, PCUN: Precuneus, POPE: Pars opercularis, PORB: Pars orbitalis, PREC: Precentral, PSTS: Postcentral, PTRI: Pars triangularis, RAC: Rostral anterior cingulate, RMF: Rostral middle frontal, SF: Superior frontal, SMAR: Supramarginal, SP: Superior parietal, ST: Superior temporal, TT: Transverse temporal
+
+Which can be easily copy and pasted into a document as a caption.
