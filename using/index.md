@@ -37,7 +37,7 @@ The <I>p</I>-value plot is intended to colour statistically significant regions 
 
 ### Example
 
-```matlab
+~~~matlab
 P = cell(1, 2);
 T = cell(1, 2);
 
@@ -47,7 +47,7 @@ for z = 1:2
 end
 
 freesurfer_statsurf_p(P, T, 'dkt')
-```
+~~~
 
 ![Image of p-value plot](img/parc_dkt_p.png)
 
