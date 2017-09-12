@@ -9,20 +9,18 @@ title: Using freesurfer_statsurf_display
 
 The following functions can be called to create a specific display type:
 
-<UL>
-<LI><I>p</I>-values: `freesurfer_statsurf_p(PValues, TValues, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
-<LI>Scalars: `freesurfer_statsurf_scalar(Values, ValuesMask, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
-<LI>R squared: `freesurfer_statsurf_rsq(RSQ, RSQMask, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
-<LI>Effect sizes: `freesurfer_statsurf_effectsize(EffectSizes, EffectSizesMask, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
-<LI>Freesurfer colours: `freesurfer_statsurf_fsrgb(RegionMask, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
-</UL>
+*<I>p</I>-values: `freesurfer_statsurf_p(PValues, TValues, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
+*Scalars: `freesurfer_statsurf_scalar(Values, ValuesMask, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
+*R squared: `freesurfer_statsurf_rsq(RSQ, RSQMask, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
+*Effect sizes: `freesurfer_statsurf_effectsize(EffectSizes, EffectSizesMask, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
+*Freesurfer colours: `freesurfer_statsurf_fsrgb(RegionMask, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
 
 The arguments `PValues, TValues, Values, ValuesMask, RSQ, RSQMask, RegionMask, EffectSizes, EffectSizesMask` must be two-element cell arrays with element 1 contains the left hemisphere values  and element 2 containing right hemisphere values. Each cell array element must be a vector of size corresponding to the number of labels in the parcellation scheme chosen in FreesurferSeedType. The parcellation schemes supported are as follows:
-<UL>
-    <li>`'aparc'`: Desikan-Killiany, 34 elements per hemisphere, lable names in seedtype_aparc.txt
-	<li>`'dkt'`: Desikan-Killiany-Tourville, 31 elements per hemisphere
-	<li>`'aparc.a2009s'`: Destreiux, 75 elements per hemisphere
-</ul>
+
+*'aparc'`: Desikan-Killiany, 34 elements per hemisphere, lable names in seedtype_aparc.txt
+*'dkt'`: Desikan-Killiany-Tourville, 31 elements per hemisphere, lable names in seedtype_dkt.txt
+*'aparc.a2009s'`: Destreiux, 75 elements per hemisphere, lable names in seedtype_aparc.a2009s.txt
+
 
 The non-"Mask" arguments `PValues, TValues, Values, RSQ, RegionMask, EffectSizes` contain values for the relevant and may be any numeric type. The "Mask" arguments `ValuesMask, RSQMask, RegionMask, EffectSizesMask` must be of type `logical` such that only elements that are true will be coloured, elements that are false will be grey.
 
