@@ -1,25 +1,55 @@
 ---
 layout: default
-title: Using mantis
+title: Using freesurfer_statsurf_display
 ---
 <br>
 {: .content}
 
-## Preliminaries
+# Using
 
-MANTiS is designed to process brain extracted T2 weighted images that are in the same orientation
-as the template. Orientation in this case doesn't imply that the new image and template
-should be registered - simply that the data ordering is the same. We use the _fslswapdim_ tool
-to control data ordering.
+The following functions can be called to create a specific display type:
 
-__All scans processed in a single batch must be in the same folder!__
+<UL>
+<LI><I>p</I>-values: `freesurfer_statsurf_p(PValues, TValues, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
+<LI>Scalars: `freesurfer_statsurf_scalar(Values, ValuesMask, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
+<LI>R squared: `freesurfer_statsurf_rsq(RSQ, RSQMask, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
+<LI>Effect sizes: `freesurfer_statsurf_effectsize(EffectSizes, EffectSizesMask, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
+<LI>Freesurfer colours: `freesurfer_statsurf_fsrgb(RegionMask, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
+</UL>
 
-Brain extraction for the MANTiS validation studies were carried out using FSL _BET_. There
-is also a [preliminary tool](extraction) in MANTiS to perform brain extraction.
+The arguments `PValues, TValues, Values, ValuesMask, RSQ, RSQMask, RegionMask, EffectSizes, EffectSizesMask` must be two-element cell arrays with element 1 contains the left hemisphere values  and element 2 containing right hemisphere values. Each cell array element must be a vector of size corresponding to the number of labels in the parcellation scheme chosen in FreesurferSeedType. The parcellation schemes supported are as follows:
+<UL>
+    <li>`'aparc'`: Desikan-Killiany, 34 elements per hemisphere, lable names in seedtype_aparc.txt
+	<li>`'dkt'`: Desikan-Killiany-Tourville, 31 elements per hemisphere
+	<li>`'aparc.a2009s'`: Destreiux, 75 elements per hemisphere
+</ul>
 
-Finally, as with typical SPM segmentation, the origins of the image need to be roughly equivalent
-to the template. There is a [tool in MANTiS](origin) to set the origin based on the centre of mass. This
-tool should also be applied to brain extracted images.
+The non-"Mask" arguments `PValues, TValues, Values, RSQ, RegionMask, EffectSizes` contain values for the relevant and may be any numeric type. The "Mask" arguments `ValuesMask, RSQMask, RegionMask, EffectSizesMask` must be of type `logical` such that only elements that are true will be coloured, elements that are false will be grey.
+
+## NAME/VALUE OPTIONS
+
+There are a number of NAME/VALUE options that are common to all plot types. 
+
+# Detailed synopsis
+
+## P-value display
+
+`freesurfer_statsurf_p(PValues, TValues, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
+
+The <I>p</I>-value plot is intended to colour statistically significant regions after hypothesis testing. The `PValues` argument contains the <I>p</I>-values for each region. The `TValues` contains the values of the test statistic. The sign of the test statistic, based on a 2-group test, values will be used to separate "Group 1 > Group 2" (positive test statistic) and "Group 2 > Group 1" (negative test statistic).
+
+### Specific NAME/VALUE arguments
+
+<UL>
+<LI>'GroupLabels' (cell array of strings) [2]: labels for the two groups, {'Group 1', 'Group 2'} by default
+</UL>
+
+<UL>
+<LI>Scalars: `freesurfer_statsurf_scalar(Values, ValuesMask, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
+<LI>R squared: `freesurfer_statsurf_rsq(RSQ, RSQMask, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
+<LI>Effect sizes: `freesurfer_statsurf_effectsize(EffectSizes, EffectSizesMask, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
+<LI>Freesurfer colours: `freesurfer_statsurf_fsrgb(RegionMask, FreesurferSeedType, NAME/VALUE OPTIONS ...)`
+</UL>
 
 ## Getting started
 
