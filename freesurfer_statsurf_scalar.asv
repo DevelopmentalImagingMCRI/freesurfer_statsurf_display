@@ -126,15 +126,15 @@ if ~isempty(ValueLimits)
 else
 	AllValues = cat(2, Values{:});
 	if(all(AllValues(:) > 0) || all(AllValues(:) < 0))
-		LegendXTick = [min(CMAPX), max(CMAPX)]';
-        LegendXTickLabels = cellstr(num2str(LegendXTick, '%.2f'));
-    else
-        LegendXTick = [min(AllValues(:)), 0, max(AllValues(:))]';
-		LegendXTickLabels = cellstr(num2str(LegendXTick, '%.2f'));
+		LegendXTick = [min(CMAPX), max(CMAPX)];
+        LegendXTickLabels = cellstr(num2str([min(CMAPX), max(CMAPX)]', '%.2f'));
+	else
+		DD = interp1(CMAPX, 1:length(CMAPX), 0);
+		LegendXTickLabels = cellstr(num2str([min(CMAPX), 0, max(CMAPX)]', '%.2f'));
 	end
 	LegendLabel = ScalarName;
-	LegendXTickLabels = cellstr(num2str(LegendXTick, '%.2f'));
-
+	LegendXTick = [min(AllValues(:)), 0, max(AllValues(:))];
+	 = T;
 end
 % for z = 1:length(XTickIDX)
 % 	text(XTickIDX(z), -1, T{z}, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'top', ...
