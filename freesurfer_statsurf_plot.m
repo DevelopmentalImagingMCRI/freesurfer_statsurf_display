@@ -284,7 +284,7 @@ if(~NoLabels)
 		% Create textbox
 		%LabelTextBoxPropsDone = [LabelTextBoxProps {'Color', 'w'}];
 		%RectProps
-		[TextBoxes, Arrows, Rectangles] = freesurfer_statplot_aparc_figures_textboxes(FreesurferSeedType);
+		[TextBoxes, Arrows, Rectangles] = freesurfer_statsurf_textboxes(FreesurferSeedType);
 		if(iscell(ShortRegionLabels))
 			ShortRegionLabelsLegendStrings = cell(1000, 1);
 			ShortRegionLabelsLegendStringsIDX = 1;
