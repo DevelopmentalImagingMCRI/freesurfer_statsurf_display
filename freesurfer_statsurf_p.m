@@ -7,8 +7,8 @@ function [AX, LegAX] = freesurfer_statsurf_p(PValues, TValues, FreesurferSeedTyp
 %	the left hemisphere and PValues{2} and TValues{2} giving the p- and t-values for
 %	the right hemisphere. Only the sign of the TValues elements are used, such that 
 %	the sign of each TValues element determines which group had a greater
-%	mean. FreesurferSeedType is a string that should be
-%	either 'aparc' or 'aparc.a2009s'. The seed type determines the number
+%	mean. FreesurferSeedType is a string that is the parcellation scheme,
+%	see supported values below. The seed type determines the number
 %	of elements required in the PValues and TValues vectors, see NOTES
 %	below.
 %	If FreesurferSeedType = 'aparc' regions that have p < 0.05 will be
@@ -21,6 +21,7 @@ function [AX, LegAX] = freesurfer_statsurf_p(PValues, TValues, FreesurferSeedTyp
 % 'aparc', Desikan-Killiany et al.
 % 'aparc.a2009s', Destrieux et al.
 % 'dkt' Desikan-Killiany-Tourville et al.
+% 'voneconomo', Von Econoomo and Koskinas
 % PARAMETER/VALUE PAIRS
 %	'GroupLabels' (cell array of strings) [2]: the two group labels used to
 %	annotate the legend, the groups are called 'Group 1' and 'Group 2' if
@@ -39,6 +40,7 @@ function [AX, LegAX] = freesurfer_statsurf_p(PValues, TValues, FreesurferSeedTyp
 % FreesurferSeedType = 'aparc': seedtype_aparc.txt
 % FreesurferSeedType = 'dkt': seedtype_dkt.txt
 % FreesurferSeedType = aparc.a2009s: seedtype_aparc.a2009s.txt
+% FreesurferSeedType = voneconomo: seedtype_voneconomo.txt
 
 Values = {PValues, TValues};
 

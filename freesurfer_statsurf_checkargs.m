@@ -45,7 +45,7 @@ for z = 1:2:length(Args)
 	end
 end
 
-FreesurferSeedTypes = {'aparc', 'aparc.a2009s', 'destreiux', 'dkt'};
+FreesurferSeedTypes = {'aparc', 'aparc.a2009s', 'destreiux', 'dkt', 'voneconomo'};
 
 if ~ismember(FreesurferSeedType, FreesurferSeedTypes)
 	error('Unsupported seed type');
@@ -88,6 +88,11 @@ else
 				if(any(L ~= 31))
 					error('Number of elements must be 31');
 				end
+			case 'voneconomo'
+				if(any(L ~= 43))
+					error('Number of elements must be 43');
+				end
+				
 		end
 	end
 end

@@ -8,8 +8,8 @@ function [AX, LegAX] = freesurfer_statsurf_rsq(RSQ, RSQMask, FreesurferSeedType,
 %	arrays with RSQ{1} and RSQMask{1} giving the d-RSQ and d-value masks for
 %	the left hemisphere and RSQ{2} and RSQMask{2} giving the d-RSQ and d-value masks for
 %	the right hemisphere. The d-value masks are logical arrays that determine which regions should
-%   have their d-RSQ plotted. FreesurferSeedType is a string that should be
-%	either 'aparc', 'aparc.a2009s'. The seed type determines the number
+%   have their d-RSQ plotted. FreesurferSeedType is a string that is the parcellation scheme,
+%	see supported values below. The seed type determines the number
 %	of elements required in the PRSQ and RSQMask vectors, see NOTES
 %	below.
 % PARAMETERS
@@ -19,6 +19,7 @@ function [AX, LegAX] = freesurfer_statsurf_rsq(RSQ, RSQMask, FreesurferSeedType,
 % 'aparc', Desikan-Killiany et al.
 % 'aparc.a2009s', Destrieux et al.
 % 'dkt' Desikan-Killiany-Tourville et al.
+% 'voneconomo', Von Econoomo and Koskinas
 % PARAMETER/VALUE PAIRS
 %	'GroupLabels' (cell array of strings) [2]: the two group labels used to
 %	annotate the legend, the groups are called 'Group 1' and 'Group 2' if
@@ -39,6 +40,7 @@ function [AX, LegAX] = freesurfer_statsurf_rsq(RSQ, RSQMask, FreesurferSeedType,
 % FreesurferSeedType = 'aparc': seedtype_aparc.txt
 % FreesurferSeedType = 'dkt': seedtype_dkt.txt
 % FreesurferSeedType = aparc.a2009s: seedtype_aparc.a2009s.txt
+% FreesurferSeedType = voneconomo: seedtype_voneconomo.txt
 
 [GroupLabels, ...
 MainTitle, ...

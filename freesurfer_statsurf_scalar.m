@@ -8,8 +8,8 @@ function [AX, LegAX] = freesurfer_statsurf_scalar(Values, ValuesMask, Freesurfer
 %	arrays with Values{1} and ValuesMask{1} giving the masks for
 %	the left hemisphere and Values{2} and ValuesMask{2} giving the masks for
 %	the right hemisphere. The value masks are logical arrays that determine which regions should
-%   have their values plotted. FreesurferSeedType is a string that should be
-%	either 'aparc', 'aparc.a2009s', 'dkt'. The seed type determines the number
+%   have their values plotted. FreesurferSeedType is a string that is the parcellation scheme,
+%	see supported values below. The seed type determines the number
 %	of elements required in the Values and ValuesMask vectors, see NOTES
 %	below.
 %
@@ -20,6 +20,7 @@ function [AX, LegAX] = freesurfer_statsurf_scalar(Values, ValuesMask, Freesurfer
 % 'aparc', Desikan-Killiany et al.
 % 'aparc.a2009s', Destrieux et al.
 % 'dkt' Desikan-Killiany-Tourville et al.
+% 'voneconomo', Von Econoomo and Koskinas
 % PARAMETER/VALUE PAIRS
 %	'GroupLabels' (cell array of strings) [2]: the two group labels used to
 %	annotate the legend, the groups are called 'Group 1' and 'Group 2' if
@@ -42,6 +43,7 @@ function [AX, LegAX] = freesurfer_statsurf_scalar(Values, ValuesMask, Freesurfer
 % FreesurferSeedType = 'aparc': seedtype_aparc.txt
 % FreesurferSeedType = 'dkt': seedtype_dkt.txt
 % FreesurferSeedType = aparc.a2009s: seedtype_aparc.a2009s.txt
+% FreesurferSeedType = voneconomo: seedtype_voneconomo.txt
 
 [GroupLabels, ...
 MainTitle, ...

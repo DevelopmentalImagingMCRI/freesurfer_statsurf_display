@@ -8,8 +8,8 @@ function [AX, LegAX] = freesurfer_statsurf_effectsize(EffectSizes, EffectSizesMa
 %	arrays with EffectSizes{1} and EffectSizesMask{1} giving the effect size values and masks for
 %	the left hemisphere and EffectSizes{2} and EffectSizesMask{2} giving the effect size values and masks for
 %	the right hemisphere. The effect size masks are logical arrays that determine which regions should
-%   have their effect sizes plotted. FreesurferSeedType is a string that should be
-%	either 'aparc', 'aparc.a2009s', 'dkt'. The seed type determines the number
+%   have their effect sizes plotted. FreesurferSeedType is a string that is the parcellation scheme,
+%	see supported values below. The seed type determines the number
 %	of elements required in the EffectSizes and EffectSizesMask vectors, see NOTES
 %	below.
 % PARAMETERS
@@ -19,6 +19,7 @@ function [AX, LegAX] = freesurfer_statsurf_effectsize(EffectSizes, EffectSizesMa
 % 'aparc', Desikan-Killiany et al.
 % 'aparc.a2009s', Destrieux et al.
 % 'dkt' Desikan-Killiany-Tourville et al.
+% 'voneconomo', Von Econoomo and Koskinas
 % PARAMETER/VALUE PAIRS
 %	'GroupLabels' (cell array of strings) [2]: the two group labels used to
 %	annotate the legend, the groups are called 'Group 1' and 'Group 2' if
@@ -44,6 +45,7 @@ function [AX, LegAX] = freesurfer_statsurf_effectsize(EffectSizes, EffectSizesMa
 % FreesurferSeedType = 'aparc': seedtype_aparc.txt
 % FreesurferSeedType = 'dkt': seedtype_dkt.txt
 % FreesurferSeedType = aparc.a2009s: seedtype_aparc.a2009s.txt
+% FreesurferSeedType = voneconomo: seedtype_voneconomo.txt
 
 [GroupLabels, ...
 MainTitle, ...

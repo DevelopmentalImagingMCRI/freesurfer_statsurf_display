@@ -52,6 +52,9 @@ Hemis = {'lh', 'rh'};
 				    'bankssts', 'frontalpole' 'temporalpole', ... these were removed from aparc by DKT
 					};
 			LabelName = 'aparc.DKTatlas';
+		case 'voneconomo'
+			InvalidStructs = {'unknown', 'corpuscallosum'};
+			LabelName = 'economo';
 	end
 	for HemiIDX = 1:length(Hemis)
 		Hemi = Hemis{HemiIDX};
