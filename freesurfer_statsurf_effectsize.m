@@ -56,7 +56,7 @@ FSAverageV, FSAverageF, ValueVertexIDX, ~, ...
 OtherArgs] = freesurfer_statsurf_checkargs({EffectSizes, EffectSizesMask}, FreesurferSeedType, varargin);
 
 LargestEffectSize = 1.5;
-LegendLabel = '\itd';
+ScalarName = '\itd';
 SmallMediumLargeEffectSize = [0.2, 0.5, 0.8];
 
 for z = 1:2:length(OtherArgs)
@@ -67,8 +67,8 @@ for z = 1:2:length(OtherArgs)
 			switch(lower(OtherArgs{z}))
 				case 'largesteffectsize'
 					LargestEffectSize = OtherArgs{z + 1};
-				case 'legendlabel'
-					LegendLabel = OtherArgs{z + 1};
+				case 'scalarname'
+					ScalarName = OtherArgs{z + 1};
 				case 'smallmediumlargeeffectsize'
 					SmallMediumLargeEffectSize = OtherArgs{z + 1};
 				otherwise
@@ -114,11 +114,11 @@ if(~isempty(SmallMediumLargeEffectSize))
 	LegendXTick = [0, SmallMediumLargeEffectSize(:)', LargestEffectSize];
 	LegendXTickLabels = {'0', {num2str(SmallMediumLargeEffectSize(1), '%.1f'), 'S'}, {num2str(SmallMediumLargeEffectSize(2), '%.1f'), 'M'}, {num2str(SmallMediumLargeEffectSize(3), '%.1f'), 'L'}, ['\geq' num2str(LargestEffectSize, '%.1f')]};
 else
-	%LegendLabel = '\itp';
+	%ScalarName = '\itp';
 	LegendXTick = [0, LargestEffectSize];
 	LegendXTickLabels = {'0', num2str(LargestEffectSize, '%.1f')};
 end
 
 freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData,  FreesurferSeedType, ...
-	EffectSizesMask, CMAPX, CMAPIMG, MainTitle, SurfType, LegendLabel, LegendXTick, LegendXTickLabels, UseShortLabels, NoLabels, NoLegend, MedialLateralLabels);
+	EffectSizesMask, CMAPX, CMAPIMG, MainTitle, SurfType, ScalarName, LegendXTick, LegendXTickLabels, UseShortLabels, NoLabels, NoLegend, MedialLateralLabels);
 %keyboard;

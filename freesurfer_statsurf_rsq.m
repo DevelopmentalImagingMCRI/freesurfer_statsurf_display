@@ -31,7 +31,7 @@ function [AX, LegAX] = freesurfer_statsurf_rsq(RSQ, RSQMask, FreesurferSeedType,
 %	'NoLabels' (logical): whether to not use labels at all
 %	'MedialLateralLabels' (logical): whether to place 'Medial' and
 %	'Lateral' on the left and right of the figure, respectively
-%	'ValueLabel' (string): the name of the variable. Used to annotated the
+%	'ScalarName' (string): the name of the variable. Used to annotated the
 %	legend. '\itr^2' by default
 % NOTES
 % Each element of the vectors in PValues and TValues point to a structure
@@ -50,7 +50,7 @@ CMAPSize, NoLabels, NoLegend, UseShortLabels, SurfType, ...
 FSAverageV, FSAverageF, ValueVertexIDX, ~, ...
 OtherArgs] = freesurfer_statsurf_checkargs({RSQ, RSQMask}, FreesurferSeedType, varargin);
 
-ValueLabel = '\itr^2';
+ScalarName = '\itr^2';
 
 for z = 1:2:length(OtherArgs)
 	if length(OtherArgs) >= z + 1
@@ -58,8 +58,8 @@ for z = 1:2:length(OtherArgs)
 			disp('Parameter not a string, ignoring');
 		else
 			switch(lower(OtherArgs{z}))
-				case 'valuelabel'
-					ValueLabel = OtherArgs{z + 1};
+				case 'scalarname'
+					ScalarName = OtherArgs{z + 1};
 				otherwise
 					disp(['Unsupported optional option (ignored): ' OtherArgs{z}]);
 			end
@@ -115,7 +115,7 @@ end
 % 	text(XTickIDX(z), -1, T{z}, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'top', ...
 % 		'Color', 'w');
 % end
-LegendLabel = ValueLabel;
+LegendLabel = ScalarName;
 LegendXTick = [0 1];%[min(AllRSQ(:)) max(AllRSQ(:))];
 LegendXTickLabels = T;
 %LegendXTickLabels = {{'0.05',  ['(' GroupLabels{1} ' > ' GroupLabels{2} ')']}, '0', {'0.05', ['(' GroupLabels{1} ' < ' GroupLabels{2} ')']}};
