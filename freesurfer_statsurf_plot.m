@@ -191,8 +191,13 @@ ArrowProps = {'Color', options.LabelColour, 'LineWidth', 2};
 TextProps = {'Color', options.LabelColour, 'LineStyle', 'none', 'EdgeColor', options.LabelColour, 'VerticalAlignment', 'middle', 'FontSize', 20};
 
 ArrowFigWidthProp = 0.15;
-ArrowFigBotNudge = 0.075;
-ArrowFigTopNudge = 0.135;
+if(options.UseShortLabels)
+	ArrowFigBotNudge = 0.075;
+	ArrowFigTopNudge = 0.135;
+else
+	ArrowFigBotNudge = 0.1;
+	ArrowFigTopNudge = 0.095;
+end
 AnnotHeight = 0.2;
 
 annotation('textbox', 'Position', [(TopLeftAXPos(1) + TopRightAXPos(1) + TopRightAXPos(3)) / 2 - 0.01, ...

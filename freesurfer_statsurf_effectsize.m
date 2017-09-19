@@ -47,17 +47,14 @@ function [AX, LegAX] = freesurfer_statsurf_effectsize(EffectSizes, EffectSizesMa
 % FreesurferSeedType = aparc.a2009s: seedtype_aparc.a2009s.txt
 % FreesurferSeedType = voneconomo: seedtype_voneconomo.txt
 
-[GroupLabels, ...
-MainTitle, ...
-MedialLateralLabels, ...
-NonSignificantColour, ...
-CMAPSize, NoLabels, NoLegend, UseShortLabels, SurfType, ...
+[options, ...
+NonSignificantColour, CMAPSize, ... 
 FSAverageV, FSAverageF, ValueVertexIDX, ~, ...
 OtherArgs] = freesurfer_statsurf_checkargs({EffectSizes, EffectSizesMask}, FreesurferSeedType, varargin);
 
-LargestEffectSize = 1.5;
-ScalarName = '\itd';
-SmallMediumLargeEffectSize = [0.2, 0.5, 0.8];
+options.LargestEffectSize = 1.5;
+options.ScalarName = '\itd';
+options.SmallMediumLargeEffectSize = [0.2, 0.5, 0.8];
 
 for z = 1:2:length(OtherArgs)
 	if length(OtherArgs) >= z + 1
@@ -66,11 +63,11 @@ for z = 1:2:length(OtherArgs)
 		else
 			switch(lower(OtherArgs{z}))
 				case 'largesteffectsize'
-					LargestEffectSize = OtherArgs{z + 1};
+					options.LargestEffectSize = OtherArgs{z + 1};
 				case 'scalarname'
-					ScalarName = OtherArgs{z + 1};
+					options.ScalarName = OtherArgs{z + 1};
 				case 'smallmediumlargeeffectsize'
-					SmallMediumLargeEffectSize = OtherArgs{z + 1};
+					options.SmallMediumLargeEffectSize = OtherArgs{z + 1};
 				otherwise
 					disp(['Unsupported optional option (ignored): ' OtherArgs{z}]);
 			end
@@ -84,7 +81,7 @@ if isempty(EffectSizesMask)
 	EffectSizesMask = cellfun(@(x) (true(size(x))), EffectSizes, 'UniformOutput', false);
 end
 
-CMAPX = linspace(0, LargestEffectSize, CMAPSize);
+CMAPX = linspace(0, options.LargestEffectSize, CMAPSize);
 CMAP = jet(numel(CMAPX)) / 2;
 
 CMAPIMG = permute(repmat(reshape(CMAP, [size(CMAP, 1), 1, 3]), [1, 50, 1]), [2 1 3]);
@@ -110,15 +107,19 @@ for HemiIDX = 1:length(Hemis)
 	end
 end
 
-if(~isempty(SmallMediumLargeEffectSize))
-	LegendXTick = [0, SmallMediumLargeEffectSize(:)', LargestEffectSize];
-	LegendXTickLabels = {'0', {num2str(SmallMediumLargeEffectSize(1), '%.1f'), 'S'}, {num2str(SmallMediumLargeEffectSize(2), '%.1f'), 'M'}, {num2str(SmallMediumLargeEffectSize(3), '%.1f'), 'L'}, ['\geq' num2str(LargestEffectSize, '%.1f')]};
+if(~isempty(options.SmallMediumLargeEffectSize))
+	LegendXTick = [0, options.SmallMediumLargeEffectSize(:)', options.LargestEffectSize];
+	LegendXTickLabels = {'0', {num2str(options.SmallMediumLargeEffectSize(1), '%.1f'), 'S'}, {num2str(options.SmallMediumLargeEffectSize(2), '%.1f'), 'M'}, {num2str(options.SmallMediumLargeEffectSize(3), '%.1f'), 'L'}, ['\geq' num2str(options.LargestEffectSize, '%.1f')]};
 else
 	%ScalarName = '\itp';
-	LegendXTick = [0, LargestEffectSize];
-	LegendXTickLabels = {'0', num2str(LargestEffectSize, '%.1f')};
+	LegendXTick = [0, options.LargestEffectSize];
+	LegendXTickLabels = {'0', num2str(options.LargestEffectSize, '%.1f')};
 end
 
-freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData,  FreesurferSeedType, ...
-	EffectSizesMask, CMAPX, CMAPIMG, MainTitle, SurfType, ScalarName, LegendXTick, LegendXTickLabels, UseShortLabels, NoLabels, NoLegend, MedialLateralLabels);
-%keyboard;
+options.LegendLabel = options.ScalarName;
+
+%#freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData,  FreesurferSeedType, ...
+%EffectSizesMask, CMAPX, CMAPIMG, MainTitle, SurfType, ScalarName, LegendXTick, LegendXTickLabels, UseShortLabels, NoLabels, NoLegend, MedialLateralLabels);
+
+freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData, FreesurferSeedType, ...
+	EffectSizesMask, CMAPX, CMAPIMG, LegendXTick, LegendXTickLabels, options);

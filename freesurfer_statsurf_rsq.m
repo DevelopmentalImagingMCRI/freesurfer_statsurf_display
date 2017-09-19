@@ -42,15 +42,12 @@ function [AX, LegAX] = freesurfer_statsurf_rsq(RSQ, RSQMask, FreesurferSeedType,
 % FreesurferSeedType = aparc.a2009s: seedtype_aparc.a2009s.txt
 % FreesurferSeedType = voneconomo: seedtype_voneconomo.txt
 
-[GroupLabels, ...
-MainTitle, ...
-MedialLateralLabels, ...
-NonSignificantColour, ...
-CMAPSize, NoLabels, NoLegend, UseShortLabels, SurfType, ...
+[options, ...
+NonSignificantColour, CMAPSize, ... 
 FSAverageV, FSAverageF, ValueVertexIDX, ~, ...
 OtherArgs] = freesurfer_statsurf_checkargs({RSQ, RSQMask}, FreesurferSeedType, varargin);
 
-ScalarName = '\itr^2';
+options.ScalarName = '\itr^2';
 
 for z = 1:2:length(OtherArgs)
 	if length(OtherArgs) >= z + 1
@@ -59,7 +56,7 @@ for z = 1:2:length(OtherArgs)
 		else
 			switch(lower(OtherArgs{z}))
 				case 'scalarname'
-					ScalarName = OtherArgs{z + 1};
+					options.ScalarName = OtherArgs{z + 1};
 				otherwise
 					disp(['Unsupported optional option (ignored): ' OtherArgs{z}]);
 			end
@@ -101,25 +98,9 @@ for HemiIDX = 1:length(Hemis)
 	end
 end
 
-% AllRSQ = cat(2, RSQ{:});
-% if(all(AllRSQ(:) > 0) || all(AllRSQ(:) < 0))
-	XTickIDX = [1, CMAPSize];
-	T = cellstr(num2str([min(CMAPX), max(CMAPX)]', '%.2f'));
-% else
-% 	DD = interp1(CMAPX, 1:length(CMAPX), 0);
-% 	XTickIDX = [1, DD, CMAPSize];
-% 	T = cellstr(num2str([min(CMAPX), 0, max(CMAPX)]', '%.2f'));
-% end
+options.LegendLabel = options.ScalarName;
+LegendXTick = [0 1];
+LegendXTickLabels = cellstr(num2str([min(CMAPX), max(CMAPX)]', '%.2f'));
 
-% for z = 1:length(XTickIDX)
-% 	text(XTickIDX(z), -1, T{z}, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'top', ...
-% 		'Color', 'w');
-% end
-LegendLabel = ScalarName;
-LegendXTick = [0 1];%[min(AllRSQ(:)) max(AllRSQ(:))];
-LegendXTickLabels = T;
-%LegendXTickLabels = {{'0.05',  ['(' GroupLabels{1} ' > ' GroupLabels{2} ')']}, '0', {'0.05', ['(' GroupLabels{1} ' < ' GroupLabels{2} ')']}};
-%keyboard;
-freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData,  FreesurferSeedType, ...
-	RSQMask, CMAPX, CMAPIMG, MainTitle, SurfType, LegendLabel, LegendXTick, LegendXTickLabels, UseShortLabels, NoLabels, NoLegend, MedialLateralLabels);
-%keyboard;
+freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData, FreesurferSeedType, ...
+	RSQMask, CMAPX, CMAPIMG, LegendXTick, LegendXTickLabels, options);

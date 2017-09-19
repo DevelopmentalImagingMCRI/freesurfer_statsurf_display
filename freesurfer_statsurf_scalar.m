@@ -45,16 +45,13 @@ function [AX, LegAX] = freesurfer_statsurf_scalar(Values, ValuesMask, Freesurfer
 % FreesurferSeedType = aparc.a2009s: seedtype_aparc.a2009s.txt
 % FreesurferSeedType = voneconomo: seedtype_voneconomo.txt
 
-[GroupLabels, ...
-MainTitle, ...
-MedialLateralLabels, ...
-NonSignificantColour, ...
-CMAPSize, NoLabels, NoLegend, UseShortLabels, SurfType, ...
+[options, ...
+NonSignificantColour, CMAPSize, ... 
 FSAverageV, FSAverageF, ValueVertexIDX, ~, ...
 OtherArgs] = freesurfer_statsurf_checkargs({Values, ValuesMask}, FreesurferSeedType, varargin);
 
-ValueLimits = [];
-ScalarName = [];
+options.ValueLimits = [];
+options.ScalarName = [];
 
 for z = 1:2:length(OtherArgs)
 	if length(OtherArgs) >= z + 1
@@ -63,9 +60,9 @@ for z = 1:2:length(OtherArgs)
 		else
 			switch(lower(OtherArgs{z}))
 				case 'scalarname'
-					ScalarName = OtherArgs{z + 1};
+					options.ScalarName = OtherArgs{z + 1};
 				case 'valuelimits'
-					ValueLimits = OtherArgs{z + 1};
+					options.ValueLimits = OtherArgs{z + 1};
 				otherwise
 					disp(['Unsupported optional option (ignored): ' OtherArgs{z}]);
 			end
@@ -80,9 +77,9 @@ if isempty(ValuesMask)
 end
 
 
-if ~isempty(ValueLimits)
+if ~isempty(options.ValueLimits)
 	CMAP = jet(CMAPSize);
-	CMAPX = linspace(ValueLimits(1), ValueLimits(2), CMAPSize);
+	CMAPX = linspace(options.ValueLimits(1), options.ValueLimits(2), CMAPSize);
 else
 	AllValues = cat(2, Values{:});
 	if(all(AllValues(:) > 0) || all(AllValues(:) < 0))
@@ -119,33 +116,28 @@ for HemiIDX = 1:length(Hemis)
 	end
 end
 
-if ~isempty(ValueLimits)
+if ~isempty(options.ValueLimits)
 	%XTickIDX = [1, CMAPSize];
-	T = cellstr(num2str([min(CMAPX), max(CMAPX)]', '%.2f'));
-	LegendLabel = ScalarName;
-	LegendXTick = ValueLimits;
-	LegendXTickLabels = T;
+	LegendXTickLabels = cellstr(num2str([min(CMAPX), max(CMAPX)]', '%.2f'));
+	
+	LegendXTick = options.ValueLimits;
 else
 	AllValues = cat(2, Values{:});
 	if(all(AllValues(:) > 0) || all(AllValues(:) < 0))
 		LegendXTick = [min(CMAPX), max(CMAPX)]';
-        LegendXTickLabels = cellstr(num2str(LegendXTick, '%.2f'));
     else
         LegendXTick = [min(AllValues(:)), 0, max(AllValues(:))]';
-		LegendXTickLabels = cellstr(num2str(LegendXTick, '%.2f'));
 	end
-	LegendLabel = ScalarName;
+	
 	LegendXTickLabels = cellstr(num2str(LegendXTick, '%.2f'));
-
 end
-% for z = 1:length(XTickIDX)
-% 	text(XTickIDX(z), -1, T{z}, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'top', ...
-% 		'Color', 'w');
-% end
-%LegendXTickLabels = {{'0.05',  ['(' GroupLabels{1} ' > ' GroupLabels{2} ')']}, '0', {'0.05', ['(' GroupLabels{1} ' < ' GroupLabels{2} ')']}};
-%keyboard;
-LabelColour = 'm';
 
-freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData,  FreesurferSeedType, ...
-	ValuesMask, CMAPX, CMAPIMG, MainTitle, SurfType, LegendLabel, LegendXTick, LegendXTickLabels, UseShortLabels, NoLabels, NoLegend, MedialLateralLabels, LabelColour);
-%keyboard;
+options.LegendLabel = options.ScalarName;
+
+options.LabelColour = 'm';
+
+%freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData,  FreesurferSeedType, ...
+%	ValuesMask, CMAPX, CMAPIMG, MainTitle, SurfType, LegendLabel, LegendXTick, LegendXTickLabels, UseShortLabels, NoLabels, NoLegend, MedialLateralLabels, LabelColour);
+
+freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData, FreesurferSeedType, ...
+	ValuesMask, CMAPX, CMAPIMG, LegendXTick, LegendXTickLabels, options);
