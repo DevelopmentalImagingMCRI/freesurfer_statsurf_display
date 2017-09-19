@@ -44,14 +44,35 @@ function [AX, LegAX] = freesurfer_statsurf_p(PValues, TValues, FreesurferSeedTyp
 
 Values = {PValues, TValues};
 
-[GroupLabels, ...
-MainTitle, ...
-MedialLateralLabels, ...
-NonSignificantColour, ...
-CMAPSize, NoLabels, NoLegend, UseShortLabels, SurfType, ...
-FSAverageV, FSAverageF, ValueVertexIDX, ~, ...
+[options, ...
+NonSignificantColour, CMAPSize, ... 
+FSAverageV, FSAverageF, ValueVertexIDX, RGB, ...
 OtherArgs] = freesurfer_statsurf_checkargs(Values, FreesurferSeedType, varargin);
 
+options.GroupLabels = {'Group 1', 'Group 2'};
+
+for z = 1:2:length(OtherArgs)
+	if length(OtherArgs) >= z + 1
+		if(~ischar(OtherArgs{z}))
+			disp('Parameter not a string, ignoring');
+		else
+			switch(lower(OtherArgs{z}))
+				case 'grouplabels'
+					options.GroupLabels = OtherArgs{z + 1};
+				otherwise
+					disp(['Unsupported optional option (ignored): ' OtherArgs{z}]);
+			end
+		end
+	else
+		disp('Last parameter had no value associated with it, ignoring');
+	end
+end
+
+if(~isempty(options.GroupLabels))
+	if(~iscellstr(options.GroupLabels) || numel(options.GroupLabels) ~= 2)
+		error('GroupLabels must be a 2 element cell array of strings');
+	end
+end
 
 %keyboard;
 
@@ -124,10 +145,10 @@ for HemiIDX = 1:length(Hemis)
 	end
 end
 
-LegendLabel = '\itp';
+options.LegendLabel = '\itp';
 if(~isempty(TValues))
 	LegendXTick = [-0.05, 0, 0.05];
-	LegendXTickLabels = {{'0.05',  ['(' GroupLabels{1} ' > ' GroupLabels{2} ')']}, '0', {'0.05', ['(' GroupLabels{1} ' < ' GroupLabels{2} ')']}};
+	LegendXTickLabels = {{'0.05',  ['(' options.GroupLabels{1} ' > ' options.GroupLabels{2} ')']}, '0', {'0.05', ['(' options.GroupLabels{1} ' < ' options.GroupLabels{2} ')']}};
 else
 	LegendXTick = [0, 0.05];
 	LegendXTickLabels = {'0', '0.05'};
@@ -137,6 +158,8 @@ end
 CMAPIMG = permute(repmat(reshape(CMAP, [size(CMAP, 1), 1, 3]), [1, 50, 1]), [2 1 3]);
 
 ValuesMask = cellfun(@(x) (x <= 0.05), PValues, 'UniformOutput', false);
+freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData, FreesurferSeedType, ...
+	ValuesMask, CMAPX, CMAPIMG, LegendXTick, LegendXTickLabels, options);
 
-freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData,  FreesurferSeedType, ...
-	ValuesMask, CMAPX, CMAPIMG, MainTitle, SurfType, LegendLabel, LegendXTick, LegendXTickLabels, UseShortLabels, NoLabels, NoLegend, MedialLateralLabels);
+%freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData,  FreesurferSeedType, ...
+%	ValuesMask, CMAPX, CMAPIMG, MainTitle, SurfType, LegendLabel, LegendXTick, LegendXTickLabels, UseShortLabels, NoLabels, NoLegend, MedialLateralLabels);

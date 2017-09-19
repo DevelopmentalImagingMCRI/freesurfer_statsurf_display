@@ -1,18 +1,15 @@
-function [GroupLabels, ...
-MainTitle, ...
-MedialLateralLabels, ...
-NonSignificantColour, ...
-CMAPSize, NoLabels, NoLegend, UseShortLabels, SurfType, ...
+function [options, ...
+NonSignificantColour, CMAPSize, ... % constants
 FSAverageV, FSAverageF, ValueVertexIDX, RGB, ... % from loadsurfaces
 OtherArgs] = freesurfer_statsurf_checkargs(Values, FreesurferSeedType, Args)
 
-GroupLabels = {'Group 1', 'Group 2'};
-MainTitle = [];
-UseShortLabels = false;
-NoLabels = false;
-NoLegend = false;
-SurfType = 'inflated';
-MedialLateralLabels = true;
+options.MainTitle = [];
+options.UseShortLabels = false;
+options.NoLabels = false;
+options.NoLegend = false;
+options.SurfType = 'inflated';
+options.MedialLateralLabels = true;
+options.LabelColour = 'w';
 
 OtherArgs = {};
 
@@ -22,20 +19,21 @@ for z = 1:2:length(Args)
 			disp('Parameter not a string, ignoring');
 		else
 			switch(lower(Args{z}))
-				case 'grouplabels'
-					GroupLabels = Args{z + 1};
 				case 'maintitle'
-					MainTitle = Args{z + 1};
+					options.MainTitle = Args{z + 1};
 				case {'shortlabels', 'useshortlabels'}
-					UseShortLabels = Args{z + 1};
+					options.UseShortLabels = Args{z + 1};
 				case 'nolabels'
-					NoLabels = Args{z + 1};
+					options.NoLabels = Args{z + 1};
 				case 'nolegend'
-					NoLegend = Args{z + 1};
+					options.NoLegend = Args{z + 1};
 				case 'surftype'
-					SurfType = Args{z + 1};
+					options.SurfType = Args{z + 1};
 				case {'medlatlabels', 'mediallaterallabels'}
-					MedialLateralLabels = Args{z + 1};
+					options.MedialLateralLabels = Args{z + 1};
+				case {'labelcolour', 'labelcolor'}
+					options.LabelColour = Args{z + 1};
+					
 				otherwise
 					OtherArgs = [OtherArgs; Args{z}; Args{z + 1}];
 			end
@@ -49,12 +47,6 @@ FreesurferSeedTypes = {'aparc', 'aparc.a2009s', 'destreiux', 'dkt', 'voneconomo'
 
 if ~ismember(FreesurferSeedType, FreesurferSeedTypes)
 	error('Unsupported seed type');
-end
-
-if(~isempty(GroupLabels))
-	if(~iscellstr(GroupLabels) || numel(GroupLabels) ~= 2)
-		error('GroupLabels must be a 2 element cell array of strings');
-	end
 end
 
 if(~iscell(Values))
@@ -97,8 +89,8 @@ else
 	end
 end
 
-if(~isempty(MainTitle))
-	if(~ischar(MainTitle))
+if(~isempty(options.MainTitle))
+	if(~ischar(options.MainTitle))
 		error('MainTitle must be a string');
 	end
 end
@@ -106,4 +98,4 @@ end
 NonSignificantColour = repmat(0.25, 1, 3);
 CMAPSize = 256;
 
-[FSAverageV, FSAverageF, ValueVertexIDX, RGB] = freesurfer_statsurf_loadsurfaces(SurfType, FreesurferSeedType);
+[FSAverageV, FSAverageF, ValueVertexIDX, RGB] = freesurfer_statsurf_loadsurfaces(options.SurfType, FreesurferSeedType);

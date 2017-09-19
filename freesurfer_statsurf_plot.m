@@ -1,5 +1,5 @@
 function [varargout] = freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData, FreesurferSeedType, ...
-	ValuesMask, CMAPX, CMAPIMG, MainTitle, SurfType, LegendLabel, LegendXTick, LegendXTickLabels, UseShortLabels, NoLabels, NoLegend, MedialLateralLabels, LabelColour)
+	ValuesMask, CMAPX, CMAPIMG, LegendXTick, LegendXTickLabels, options)
 
 % plots the stat surfaces
 
@@ -12,10 +12,6 @@ function [varargout] = freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVert
 % 		error(['Variable does not exist: ' VariablesNeeded{z}]);
 % 	end
 % end
-
-if nargin < 17
-	LabelColour = 'w';
-end
 
 [APARCLabels{1:2}] = deal({'bankssts', 'caudalanteriorcingulate', 'caudalmiddlefrontal', ...
 	'cuneus', 'entorhinal', 'fusiform', ...
@@ -41,7 +37,7 @@ end
     'superiorparietal', 'superiortemporal', 'supramarginal', ...
     'transversetemporal', 'insula'});
 
-if UseShortLabels
+if options.UseShortLabels
 	APARCShortLabels = {'BSTS', 'CAC', 'CMF', 'CUN', 'ENT', 'FUS', ...
 				'INFP', 'IT', 'ISTC', 'LOCC', 'LORB', 'LIN', 'MORB', 'MT', ...
 				'PARH', 'PARC', 'POPE', 'PORB', 'PTRI', 'PCAL', 'PSTS', 'PC', ...
@@ -75,7 +71,7 @@ FigPos = [1 1 1048 850];
 %FigPos = [1702 100 1048 850]; % just for multiple monitors
 set(gcf, 'Color', 'k', 'Position', FigPos, 'PaperPosition', FigPos, 'PaperUnits', 'points', 'InvertHardCopy', 'off');
 
-switch(SurfType)
+switch(options.SurfType)
 	case {'pial', 'white'}
 		ZoomFactor = 1;
 	case 'inflated'
@@ -118,10 +114,7 @@ if ~verLessThan('matlab', 'R2016a')
 	set(AX, 'Clipping', 'off');
 end
 
-TopLeftAXPos = get(AX(1, 1), 'Position');
-TopRightAXPos = get(AX(1, 2), 'Position');
-BottomLeftAXPos = get(AX(2, 1), 'Position');
-BottomRightAXPos = get(AX(2, 2), 'Position');
+
 
 DoPositionRectangles = false;
 
@@ -132,52 +125,47 @@ if DoPositionRectangles
 		annotation('rectangle', AXPos, 'Color', Colors(z));
 	end
 end
-if ~isempty(CMAPX) && ~NoLegend
+if ~isempty(CMAPX) && ~options.NoLegend
 	%keyboard;
 	LegAXHeight = 0.05;
 	LegAXWidth = 0.2;
 	LegAX = axes('Position', [(TopLeftAXPos(1) + TopRightAXPos(1) + TopRightAXPos(3)) / 2 - LegAXWidth / 2, ...
-		BottomLeftAXPos(2) - LegAXHeight * 1.2, ...
+		BottomLeftAXPos(2) - LegAXHeight * 1.5, ...
 		LegAXWidth, ...
 		LegAXHeight]);
 	imshow(CMAPIMG, [], 'YData', (1:size(CMAPIMG, 2)) / 10, 'XData', 1:size(CMAPIMG, 2));
 	axis xy on;
 
-	set(gca, 'YTick', [], 'Color', 'w', 'XColor', 'w', 'XTick', []);
+	set(gca, 'YTick', [], 'Color', options.LabelColour, 'XColor', options.LabelColour, 'XTick', []);
 
 	LegendXTickIDX = interp1(CMAPX, 1:length(CMAPX), LegendXTick);
 
 	%LegendXTickLabels = {'0', ['>= ' num2str(LargestEffectSize, '%.3f')]};
 	for z = 1:length(LegendXTickIDX)
 		text(LegendXTickIDX(z), -1, LegendXTickLabels{z}, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'top', ...
-			'Color', 'w');
+			'Color', options.LabelColour);
 	end
-	if(~isempty(LegendLabel))
-		text(0.5, -1.0, LegendLabel, 'Color', 'w', 'HorizontalAlignment', 'center', 'VerticalAlignment', 'top', 'FontSize', 24, 'FontName', 'Times', 'Units', 'normalized');
+	if(~isempty(options.LegendLabel))
+		text(0.5, -1.0, options.LegendLabel, 'Color', options.LabelColour, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'top', 'FontSize', 24, 'FontName', 'Times', 'Units', 'normalized');
 	end
 end
 
 % title
-if(~isempty(MainTitle))
+if(~isempty(options.MainTitle))
 	annotation('textbox', 'Position', [(TopLeftAXPos(1) + TopRightAXPos(1) + TopRightAXPos(3)) / 2 - 0.01, ...
 		TopLeftAXPos(2) + TopLeftAXPos(4), ...
 		0.02, ...
-		1 - (TopLeftAXPos(2) + TopLeftAXPos(4))], 'String', MainTitle, 'Color', 'w', 'HorizontalAlignment', 'center', 'FontSize', 18, 'VerticalAlignment', 'top');
+		1 - (TopLeftAXPos(2) + TopLeftAXPos(4))], ...
+		'String', options.MainTitle, ...
+		'Color', options.LabelColour, 'HorizontalAlignment', 'center', 'FontSize', 18, 'VerticalAlignment', 'top');
 end
 
-annotation('textbox', 'Position', [(TopLeftAXPos(1) + TopRightAXPos(1) + TopRightAXPos(3)) / 2 - 0.01, ...
-	TopLeftAXPos(2) + 9 * TopLeftAXPos(4) / 10, ...
-	0.02, ...
-	0.01], 'String', 'LH', 'Color', 'w', 'HorizontalAlignment', 'center', 'FontSize', 18);
-annotation('textbox', 'Position', [(BottomLeftAXPos(1) + BottomRightAXPos(1) + BottomRightAXPos(3)) / 2 - 0.01, ...
-	BottomLeftAXPos(2) + BottomLeftAXPos(4) / 10, ...
-	0.02, ...
-	0.01], 'String', 'RH', 'Color', 'w', 'HorizontalAlignment', 'center', 'FontSize', 18);
 
-if MedialLateralLabels
+
+if options.MedialLateralLabels
 	
 	if ~verLessThan('matlab', 'R2016a')
-		if ~UseShortLabels
+		if ~options.UseShortLabels
 			switch(computer)
 				case 'GLNXA64'
 					LeftX = -1.2;
@@ -187,43 +175,59 @@ if MedialLateralLabels
 					RightX = 2.5;
 			end
 		else
-			LeftX = -0.75;
-			RightX = 1.71;
+			LeftX = -1;
+			RightX = 2;
 		end
 	else
 		LeftX = -0.2;
 		RightX = 1.21;
 	end
-	T = {'FontSize', 20, 'Color', 'w', 'Units', 'normalized', 'HorizontalAlignment', 'center'};
+	T = {'FontSize', 20, 'Color', options.LabelColour, 'Units', 'normalized', 'HorizontalAlignment', 'center'};
 	text( LeftX, 0.275,  'Medial', 'Parent', AX(1, 1), 'Rotation',  90, T{:});
 	text(RightX, 0.275, 'Lateral', 'Parent', AX(1, 2), 'Rotation', 270, T{:});
 end
-% now put the PA arrows
-%keyboard;
-TopAXPos = get(AX(1, 1), 'Position');
-BotAXPos = get(AX(2, 1), 'Position');
 
-ArrowProps = {'Color', 'w', 'LineWidth', 2};
-TextProps = {'Color', 'w', 'LineStyle', 'none', 'EdgeColor', 'w', 'VerticalAlignment', 'middle', 'FontSize', 20};
+% now put the PA arrows and LH and RH labels
 
-W = 0.15;
-annotation('doublearrow', [TopAXPos(1) + TopAXPos(3) * W, TopAXPos(1) + TopAXPos(3) * (1 - W)], ...
-	repmat(TopAXPos(2) + TopAXPos(4), 1, 2), ArrowProps{:});
-annotation('textbox', [TopAXPos(1), TopAXPos(2) + TopAXPos(4) - 0.1, TopAXPos(3) * W, 0.2], 'String', 'P', ...
+TopLeftAXPos = get(AX(1, 1), 'Position');
+TopRightAXPos = get(AX(1, 2), 'Position');
+BottomLeftAXPos = get(AX(2, 1), 'Position');
+BottomRightAXPos = get(AX(2, 2), 'Position');
+
+ArrowProps = {'Color', options.LabelColour, 'LineWidth', 2};
+TextProps = {'Color', options.LabelColour, 'LineStyle', 'none', 'EdgeColor', options.LabelColour, 'VerticalAlignment', 'middle', 'FontSize', 20};
+
+ArrowFigWidthProp = 0.15;
+ArrowFigBotNudge = 0.075;
+ArrowTopBotNudge = 0.075;
+
+annotation('textbox', 'Position', [(TopLeftAXPos(1) + TopRightAXPos(1) + TopRightAXPos(3)) / 2 - 0.01, ...
+	TopLeftAXPos(2) + 9 * TopLeftAXPos(4) / 10, ...
+	0.02, ...
+	0.01], 'String', 'LH', 'Color', options.LabelColour, 'HorizontalAlignment', 'center', 'FontSize', 18);
+annotation('textbox', 'Position', [(BottomLeftAXPos(1) + BottomRightAXPos(1) + BottomRightAXPos(3)) / 2 - 0.01, ...
+	BottomLeftAXPos(2) + BottomLeftAXPos(4) / 10, ...
+	0.02, ...
+	0.01], 'String', 'RH', 'Color', options.LabelColour, 'HorizontalAlignment', 'center', 'FontSize', 18);
+
+% top left
+annotation('doublearrow', [TopLeftAXPos(1) + TopLeftAXPos(3) * ArrowFigWidthProp, TopLeftAXPos(1) + TopLeftAXPos(3) * (1 - ArrowFigWidthProp)], ...
+	repmat(TopLeftAXPos(2) + TopLeftAXPos(4), 1, 2), ArrowProps{:});
+annotation('textbox', [TopLeftAXPos(1), TopLeftAXPos(2) + TopLeftAXPos(4) - 0.1, TopLeftAXPos(3) * ArrowFigWidthProp, 0.2], 'String', 'P', ...
 	TextProps{:}, ...
 	'HorizontalAlignment', 'right');
-annotation('textbox', [TopAXPos(1) + TopAXPos(3) * (1 - W), TopAXPos(2) + TopAXPos(4) - 0.1, TopAXPos(3) * W, 0.2], 'String', 'A', ...
+annotation('textbox', [TopLeftAXPos(1) + TopLeftAXPos(3) * (1 - ArrowFigWidthProp), TopLeftAXPos(2) + TopLeftAXPos(4) - 0.1, TopLeftAXPos(3) * ArrowFigWidthProp, 0.2], 'String', 'A', ...
 	TextProps{:}, ...
 	'HorizontalAlignment', 'left');
 
-T = 0.105;
+
 % bottom left
-annotation('doublearrow', [BotAXPos(1) + BotAXPos(3) * W, BotAXPos(1) + BotAXPos(3) * (1 - W)], ...
-	repmat(BotAXPos(2), 1, 2) + 0.1 - T, ArrowProps{:});
-annotation('textbox', [BotAXPos(1), BotAXPos(2) - T, BotAXPos(3) * W, 0.2], 'String', 'A', ...
+annotation('doublearrow', [BotLeftAXPos(1) + BotLeftAXPos(3) * ArrowFigWidthProp, BotLeftAXPos(1) + BotLeftAXPos(3) * (1 - ArrowFigWidthProp)], ...
+	repmat(BotLeftAXPos(2), 1, 2) + 0.1 - ArrowFigBotNudge, ArrowProps{:});
+annotation('textbox', [BotLeftAXPos(1), BotLeftAXPos(2) - ArrowFigBotNudge, BotLeftAXPos(3) * ArrowFigWidthProp, 0.2], 'String', 'A', ...
 	TextProps{:}, ...
 	'HorizontalAlignment', 'right');
-annotation('textbox', [BotAXPos(1) + BotAXPos(3) * (1 - W), BotAXPos(2) - T, BotAXPos(3) * W, 0.2], 'String', 'P', ...
+annotation('textbox', [BotLeftAXPos(1) + BotLeftAXPos(3) * (1 - ArrowFigWidthProp), BotLeftAXPos(2) - ArrowFigBotNudge, BotLeftAXPos(3) * ArrowFigWidthProp, 0.2], 'String', 'P', ...
 	TextProps{:}, ...
 	'HorizontalAlignment', 'left');
 
@@ -231,26 +235,27 @@ TopAXPos = get(AX(1, 2), 'Position');
 BotAXPos = get(AX(2, 2), 'Position');
 
 % top right
-annotation('doublearrow', [TopAXPos(1) + TopAXPos(3) * W, TopAXPos(1) + TopAXPos(3) * (1 - W)], ...
+annotation('doublearrow', [TopAXPos(1) + TopAXPos(3) * ArrowFigWidthProp, TopAXPos(1) + TopAXPos(3) * (1 - ArrowFigWidthProp)], ...
 	repmat(TopAXPos(2) + TopAXPos(4), 1, 2), ArrowProps{:});
-annotation('textbox', [TopAXPos(1), TopAXPos(2) + TopAXPos(4) - 0.1, TopAXPos(3) * W, 0.2], 'String', 'A', ...
+annotation('textbox', [TopAXPos(1), TopAXPos(2) + TopAXPos(4) - 0.1, TopAXPos(3) * ArrowFigWidthProp, 0.2], 'String', 'A', ...
 	TextProps{:}, ...
 	'HorizontalAlignment', 'right');
-annotation('textbox', [TopAXPos(1) + TopAXPos(3) * (1 - W), TopAXPos(2) + TopAXPos(4) - 0.1, TopAXPos(3) * W, 0.2], 'String', 'P', ...
+annotation('textbox', [TopAXPos(1) + TopAXPos(3) * (1 - ArrowFigWidthProp), TopAXPos(2) + TopAXPos(4) - 0.1, TopAXPos(3) * ArrowFigWidthProp, 0.2], 'String', 'P', ...
 	TextProps{:}, ...
 	'HorizontalAlignment', 'left');
 
 % bottom right
-annotation('doublearrow', [BotAXPos(1) + BotAXPos(3) * W, BotAXPos(1) + BotAXPos(3) * (1 - W)], ...
-	repmat(BotAXPos(2) + 0.1 - T, 1, 2), ArrowProps{:});
-annotation('textbox', [BotAXPos(1), BotAXPos(2) - T, BotAXPos(3) * W, 0.2], 'String', 'P', ...
+annotation('doublearrow', [BotAXPos(1) + BotAXPos(3) * ArrowFigWidthProp, BotAXPos(1) + BotAXPos(3) * (1 - ArrowFigWidthProp)], ...
+	repmat(BotAXPos(2) + 0.1 - ArrowFigBotNudge, 1, 2), ArrowProps{:});
+annotation('textbox', [BotAXPos(1), BotAXPos(2) - T, BotAXPos(3) * ArrowFigWidthProp, 0.2], 'String', 'P', ...
 	TextProps{:}, ...
 	'HorizontalAlignment', 'right');
-annotation('textbox', [BotAXPos(1) + BotAXPos(3) * (1 - W), BotAXPos(2) - T, BotAXPos(3) * W, 0.2], 'String', 'A', ...
+annotation('textbox', [BotAXPos(1) + BotAXPos(3) * (1 - ArrowFigWidthProp), BotAXPos(2) - ArrowFigBotNudge, BotAXPos(3) * ArrowFigWidthProp, 0.2], 'String', 'A', ...
 	TextProps{:}, ...
 	'HorizontalAlignment', 'left');
 %NoLabels = false;
-if(~NoLabels)
+
+if(~options.NoLabels)
 	if(ismember(lower(FreesurferSeedType), {'aparc', 'dkt'}))
 		if(iscell(ShortRegionLabels))
 			FontWeight = 'bold';
@@ -268,21 +273,21 @@ if(~NoLabels)
 
 		LabelTextBoxPropsDone = {'FitBoxToText', 'off', ...
 			'Margin', 2, ...
-			'Color', LabelColour, 'EdgeColor', 'none', 'LineStyle', 'none', ...
+			'Color', options.LabelColour, 'EdgeColor', 'none', 'LineStyle', 'none', ...
 			'VerticalAlignment', 'middle', ...
 			'HorizontalAlignment', 'center', ...
 			'FontWeight', FontWeight, ...
 			'FontSize', FontSize};
 
-		ArrowProps = {'LineWidth', 2, 'Color', LabelColour};
+		ArrowProps = {'LineWidth', 2, 'Color', options.LabelColour};
 		
 		if (verLessThan('matlab', 'r2017a'))
-			RectProps = {'FaceColor', 'flat', 'EdgeColor', LabelColour, 'LineWidth', 2};
+			RectProps = {'FaceColor', 'flat', 'EdgeColor', options.LabelColour, 'LineWidth', 2};
 		else
-			RectProps = {'FaceColor', 'none', 'EdgeColor', LabelColour, 'LineWidth', 2};
+			RectProps = {'FaceColor', 'none', 'EdgeColor', options.LabelColour, 'LineWidth', 2};
 		end
 		% Create textbox
-		%LabelTextBoxPropsDone = [LabelTextBoxProps {'Color', 'w'}];
+		%LabelTextBoxPropsDone = [LabelTextBoxProps {'Color', options.LabelColour}];
 		%RectProps
 		[TextBoxes, Arrows, Rectangles] = freesurfer_statsurf_textboxes(FreesurferSeedType);
 		if(iscell(ShortRegionLabels))
