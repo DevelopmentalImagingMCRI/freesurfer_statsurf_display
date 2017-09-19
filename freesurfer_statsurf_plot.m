@@ -140,17 +140,17 @@ if ~isempty(CMAPX) && ~options.NoLegend
 	imshow(CMAPIMG, [], 'YData', (1:size(CMAPIMG, 2)) / 10, 'XData', 1:size(CMAPIMG, 2));
 	axis xy on;
 
-	set(gca, 'YTick', [], 'Color', options.LabelColour, 'XColor', options.LabelColour, 'XTick', []);
+	set(gca, 'YTick', [], 'Color', options.BackgroundTextColour, 'XColor', options.BackgroundTextColour, 'XTick', []);
 
 	LegendXTickIDX = interp1(CMAPX, 1:length(CMAPX), LegendXTick);
 
 	%LegendXTickLabels = {'0', ['>= ' num2str(LargestEffectSize, '%.3f')]};
 	for z = 1:length(LegendXTickIDX)
 		text(LegendXTickIDX(z), -1, LegendXTickLabels{z}, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'top', ...
-			'Color', options.LabelColour);
+			'Color', options.BackgroundTextColour);
 	end
 	if(~isempty(options.LegendLabel))
-		text(0.5, -1.0, options.LegendLabel, 'Color', options.LabelColour, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'top', 'FontSize', 24, 'FontName', 'Times', 'Units', 'normalized');
+		text(0.5, -1.0, options.LegendLabel, 'Color', options.BackgroundTextColour, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'top', 'FontSize', 24, 'FontName', 'Times', 'Units', 'normalized');
 	end
 end
 
@@ -175,7 +175,7 @@ if options.MedialLateralLabels
 		LeftX = -0.2;
 		RightX = 1.21;
 	end
-	T = {'FontSize', 20, 'Color', options.LabelColour, 'Units', 'normalized', 'HorizontalAlignment', 'center'};
+	T = {'FontSize', 20, 'Color', options.BackgroundTextColour, 'Units', 'normalized', 'HorizontalAlignment', 'center'};
 	text( LeftX, 0.275,  'Medial', 'Parent', AX(1, 1), 'Rotation',  90, T{:});
 	text(RightX, 0.275, 'Lateral', 'Parent', AX(1, 2), 'Rotation', 270, T{:});
 end
@@ -187,8 +187,8 @@ TopRightAXPos = get(AX(1, 2), 'Position');
 BottomLeftAXPos = get(AX(2, 1), 'Position');
 BottomRightAXPos = get(AX(2, 2), 'Position');
 
-ArrowProps = {'Color', options.LabelColour, 'LineWidth', 2};
-TextProps = {'Color', options.LabelColour, 'LineStyle', 'none', 'EdgeColor', options.LabelColour, 'VerticalAlignment', 'middle', 'FontSize', 20};
+ArrowProps = {'Color', options.BackgroundTextColour, 'LineWidth', 2};
+TextProps = {'Color', options.BackgroundTextColour, 'LineStyle', 'none', 'EdgeColor', options.LabelColour, 'VerticalAlignment', 'middle', 'FontSize', 20};
 
 ArrowFigWidthProp = 0.15;
 if(options.UseShortLabels)
@@ -265,7 +265,7 @@ if(~isempty(options.MainTitle))
 		0.02, ...
 		1 - (TopLeftAXPos(2) + TopLeftAXPos(4))], ...
 		'String', options.MainTitle, ...
-		'Color', options.LabelColour, 'HorizontalAlignment', 'center', 'FontSize', 18, 'VerticalAlignment', 'middle');
+		'Color', options.BackgroundTextColour, 'HorizontalAlignment', 'center', 'FontSize', 18, 'VerticalAlignment', 'middle', 'EdgeColor', 'none');
 end
 
 if(~options.NoLabels)
@@ -292,7 +292,7 @@ if(~options.NoLabels)
 			'FontWeight', FontWeight, ...
 			'FontSize', FontSize};
 
-		ArrowProps = {'LineWidth', 2, 'Color', options.LabelColour};
+		ArrowProps = {'LineWidth', 2, 'Color', 'w'};
 		
 		if (verLessThan('matlab', 'r2017a'))
 			RectProps = {'FaceColor', 'flat', 'EdgeColor', options.LabelColour, 'LineWidth', 2};

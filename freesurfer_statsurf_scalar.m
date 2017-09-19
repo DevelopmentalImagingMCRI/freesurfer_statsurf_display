@@ -125,8 +125,10 @@ else
 	AllValues = cat(2, Values{:});
 	if(all(AllValues(:) > 0) || all(AllValues(:) < 0))
 		LegendXTick = [min(CMAPX), max(CMAPX)]';
+		options.LabelColour = 'w';
     else
         LegendXTick = [min(AllValues(:)), 0, max(AllValues(:))]';
+		options.LabelColour = 'm';
 	end
 	
 	LegendXTickLabels = cellstr(num2str(LegendXTick, '%.2f'));
@@ -134,7 +136,7 @@ end
 
 options.LegendLabel = options.ScalarName;
 
-options.LabelColour = 'm';
+
 
 %freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData,  FreesurferSeedType, ...
 %	ValuesMask, CMAPX, CMAPIMG, MainTitle, SurfType, LegendLabel, LegendXTick, LegendXTickLabels, UseShortLabels, NoLabels, NoLegend, MedialLateralLabels, LabelColour);

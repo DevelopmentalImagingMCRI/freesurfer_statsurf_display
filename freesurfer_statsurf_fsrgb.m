@@ -64,4 +64,4 @@ end
 %	ValuesMask, [], [], MainTitle, SurfType, [], [], [], UseShortLabels, NoLabels, NoLegend, MedialLateralLabels);
 
 freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData, FreesurferSeedType, ...
-	ValuesMask, [], [], LegendXTick, LegendXTickLabels, options);
+	ValuesMask, [], [], [], [], options);

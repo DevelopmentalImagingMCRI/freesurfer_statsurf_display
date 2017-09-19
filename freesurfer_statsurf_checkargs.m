@@ -10,6 +10,7 @@ options.NoLegend = false;
 options.SurfType = 'inflated';
 options.MedialLateralLabels = true;
 options.LabelColour = 'w';
+options.BackgroundTextColour = 'w';
 
 OtherArgs = {};
 
