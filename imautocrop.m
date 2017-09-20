@@ -1,10 +1,10 @@
-function NewIMG = imautocropblack(IMG, Padding)
+function NewIMG = imautocrop(IMG, Padding)
 
 if nargin < 2
 	Padding = 0;
 end
 
-if ~isa(IMG)
+if ~isa(IMG, 'uint8')
 	error('IMG must be a uint8');
 end
 
