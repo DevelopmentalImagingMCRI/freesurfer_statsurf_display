@@ -45,7 +45,7 @@ TextBoxes.LH.parsopercularis{1} = {'Position', [0.532565, 0.775294, 0.069458, 0.
 Arrows.LH.parsopercularis = {'X', [0.602061, 0.669847], 'Y', [0.783529, 0.745882]};
 
 TextBoxes.LH.parsorbitalis{1} = {'Position', [0.537412, 0.677647, 0.057015, 0.039527], 'String', {'Pars', 'orbitalis'}, 'HorizontalAlignment', 'center', 'LineStyle', '-', 'EdgeColor', 'w', 'LineWidth', 2};
-switch(FreesurferSeedType)
+switch(lower(FreesurferSeedType))
 	case 'aparc'
 		Arrows.LH.parsorbitalis = {'X', [0.594389, 0.625954], 'Y', [0.691765, 0.695294]};
 	case 'dkt'
