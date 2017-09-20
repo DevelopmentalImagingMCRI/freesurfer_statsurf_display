@@ -1,7 +1,9 @@
-function [TextBoxes, Arrows, Rectangles] = freesurfer_statsurf_textboxes(varargin)
+function [TextBoxes, Arrows, Rectangles] = freesurfer_statsurf_textboxes(FreesurferSeedType)
 
-TextBoxes.LH.bankssts{1} = {'Position', [0.823435, 0.630588, 0.051565, 0.047059], 'String', {'Bank of', 'STS'}, 'HorizontalAlignment', 'center', 'LineStyle', '-', 'EdgeColor', 'w', 'LineWidth', 2};
-Arrows.LH.bankssts = {'X', [0.84542 0.784351145038168], 'Y', [0.676471 0.728235294117647]};
+if(strcmpi(FreesurferSeedType, 'aparc'))
+    TextBoxes.LH.bankssts{1} = {'Position', [0.823435, 0.630588, 0.051565, 0.047059], 'String', {'Bank of', 'STS'}, 'HorizontalAlignment', 'center', 'LineStyle', '-', 'EdgeColor', 'w', 'LineWidth', 2};
+    Arrows.LH.bankssts = {'X', [0.84542 0.784351145038168], 'Y', [0.676471 0.728235294117647]};
+end
 TextBoxes.LH.caudalanteriorcingulate{1} = {'Position', [0.270305, 0.724706, 0.097939, 0.049882], 'String', {'Caudal anterior'}, 'HorizontalAlignment', 'center', 'LineStyle', 'none', 'EdgeColor', 'none', 'LineWidth', 2};
 Arrows.LH.caudalanteriorcingulate = {'X', [0.330153, 0.361641], 'Y', [0.756647, 0.775294]};
 Rectangles.LH.caudalanteriorcingulate = {'Position', [0.274817, 0.724118, 0.088695, 0.032941]};
@@ -41,12 +43,24 @@ Arrows.LH.parahippocampal = {'X', [0.258550, 0.269084], 'Y', [0.635471, 0.677647
 TextBoxes.LH.paracentral{1} = {'Position', [0.250962, 0.820588, 0.074427, 0.047059], 'String', {'Paracentral', 'lobule'}, 'HorizontalAlignment', 'left', 'LineStyle', 'none', 'EdgeColor', 'none', 'LineWidth', 2};
 TextBoxes.LH.parsopercularis{1} = {'Position', [0.532565, 0.775294, 0.069458, 0.041880], 'String', {'Pars', 'opercularis'}, 'HorizontalAlignment', 'center', 'LineStyle', '-', 'EdgeColor', 'w', 'LineWidth', 2};
 Arrows.LH.parsopercularis = {'X', [0.602061, 0.669847], 'Y', [0.783529, 0.745882]};
+
 TextBoxes.LH.parsorbitalis{1} = {'Position', [0.537412, 0.677647, 0.057015, 0.039527], 'String', {'Pars', 'orbitalis'}, 'HorizontalAlignment', 'center', 'LineStyle', '-', 'EdgeColor', 'w', 'LineWidth', 2};
-Arrows.LH.parsorbitalis = {'X', [0.594389, 0.625954], 'Y', [0.691765, 0.695294]};
+switch(FreesurferSeedType)
+	case 'aparc'
+		Arrows.LH.parsorbitalis = {'X', [0.594389, 0.625954], 'Y', [0.691765, 0.695294]};
+	case 'dkt'
+		Arrows.LH.parsorbitalis = {'X', [0.594389, 0.651717], 'Y', [0.691765, 0.695294]};
+end
+
 TextBoxes.LH.parstriangularis{1} = {'Position', [0.523061, 0.725882, 0.069458, 0.041880], 'String', {'Pars', 'triangularis'}, 'HorizontalAlignment', 'center', 'LineStyle', '-', 'EdgeColor', 'w', 'LineWidth', 2};
 Arrows.LH.parstriangularis = {'X', [0.593397, 0.643130], 'Y', [0.742353, 0.723529]};
 TextBoxes.LH.pericalcarine{1} = {'Position', [0.075191, 0.742353, 0.081298, 0.029412], 'String', {'Pericalcarine'}, 'HorizontalAlignment', 'center', 'LineStyle', '-', 'EdgeColor', 'w', 'LineWidth', 2};
-Arrows.LH.pericalcarine = {'X', [0.1565, 0.180344], 'Y', [0.752941, 0.732941]};
+switch(lower(FreesurferSeedType))
+	case 'aparc'
+		Arrows.LH.pericalcarine = {'X', [0.1565, 0.180344], 'Y', [0.752941, 0.732941]};
+	case 'dkt'
+		Arrows.LH.pericalcarine = {'X', [0.1565, 0.188931], 'Y', [0.752941, 0.729411]};
+end
 TextBoxes.LH.postcentral{1} = {'Position', [0.749008, 0.872941, 0.075382, 0.028235], 'String', {'Postcentral'}, 'HorizontalAlignment', 'center', 'LineStyle', '-', 'EdgeColor', 'w', 'LineWidth', 2};
 Arrows.LH.postcentral = {'X', [0.786221, 0.760496], 'Y', [0.872941, 0.843529]};
 TextBoxes.LH.posteriorcingulate{1} = {'Position', [0.262908, 0.770588, 0.072473, 0.052941], 'String', {'Posterior', 'cingulate'}, 'HorizontalAlignment', 'center', 'LineStyle', 'none', 'EdgeColor', 'none', 'LineWidth', 2};
@@ -135,10 +149,14 @@ Arrows.RH.superiorparietal = {'X', [0.650763, 0.673664], 'Y', [0.580000, 0.56000
 TextBoxes.RH.superiortemporal{1} = {'Position', [0.708061, 0.422941, 0.071519, 0.030588], 'String', {'Superior'}, 'HorizontalAlignment', 'center', 'LineStyle', 'none', 'EdgeColor', 'none', 'LineWidth', 2};
 TextBoxes.RH.superiortemporal{2} = {'Position', [0.722328, 0.407647, 0.066794, 0.031765], 'String', {'temporal'}, 'HorizontalAlignment', 'center', 'LineStyle', 'none', 'EdgeColor', 'none', 'LineWidth', 2};
 TextBoxes.RH.supramarginal{1} = {'Position', [0.686115, 0.495294, 0.046710, 0.035294], 'String', {'Supra-', 'marginal'}, 'HorizontalAlignment', 'left', 'LineStyle', 'none', 'EdgeColor', 'none', 'LineWidth', 2};
-TextBoxes.RH.frontalpole{1} = {'Position', [0.093061, 0.407059, 0.050069, 0.046471], 'String', {'Frontal', 'pole'}, 'HorizontalAlignment', 'center', 'LineStyle', '-', 'EdgeColor', 'w', 'LineWidth', 2};
-Arrows.RH.frontalpole = {'X', [0.144084, 0.159351], 'Y', [0.417824, 0.424706]};
-TextBoxes.RH.temporalpole{1} = {'Position', [0.179969, 0.332941, 0.060198, 0.044882], 'String', {'Temporal', 'pole'}, 'HorizontalAlignment', 'center', 'LineStyle', '-', 'EdgeColor', 'w', 'LineWidth', 2};
-Arrows.RH.temporalpole = {'X', [0.241412, 0.258588], 'Y', [0.361353, 0.377647]};
+
+if(strcmpi(FreesurferSeedType, 'aparc'))
+	TextBoxes.RH.frontalpole{1} = {'Position', [0.093061, 0.407059, 0.050069, 0.046471], 'String', {'Frontal', 'pole'}, 'HorizontalAlignment', 'center', 'LineStyle', '-', 'EdgeColor', 'w', 'LineWidth', 2};
+	Arrows.RH.frontalpole = {'X', [0.144084, 0.159351], 'Y', [0.417824, 0.424706]};
+	TextBoxes.RH.temporalpole{1} = {'Position', [0.179969, 0.332941, 0.060198, 0.044882], 'String', {'Temporal', 'pole'}, 'HorizontalAlignment', 'center', 'LineStyle', '-', 'EdgeColor', 'w', 'LineWidth', 2};
+	Arrows.RH.temporalpole = {'X', [0.241412, 0.258588], 'Y', [0.361353, 0.377647]};
+end
+
 TextBoxes.RH.transversetemporal{1} = {'Position', [0.551305, 0.514118, 0.069840, 0.048235], 'String', {'Transverse', 'temporal'}, 'HorizontalAlignment', 'center', 'LineStyle', '-', 'EdgeColor', 'w', 'LineWidth', 2};
 Arrows.RH.transversetemporal = {'X', [0.6211, 0.734733], 'Y', [0.534118, 0.460000]};
 TextBoxes.RH.insula{1} = {'Position', [0.747183, 0.434118, 0.046710, 0.031765], 'String', {'Insula'}, 'HorizontalAlignment', 'center', 'LineStyle', 'none', 'EdgeColor', 'none', 'LineWidth', 2};
