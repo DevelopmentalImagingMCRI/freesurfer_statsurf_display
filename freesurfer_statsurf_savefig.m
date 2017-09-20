@@ -5,5 +5,5 @@ set(gcf, 'PaperPosition', FigPos, 'PaperUnits', 'points', 'InvertHardCopy', 'off
 exportfig(gcf, PNGName, 'Format', 'png', 'Width', FigPos(3), 'Height', FigPos(4), 'Color', 'rgb');
 
 IMG = imread(PNGName);
-IMG = imautocropblack(IMG, 10);
+IMG = imautocrop(IMG, 10);
 imwrite(IMG, PNGName);
