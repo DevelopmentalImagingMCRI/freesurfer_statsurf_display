@@ -74,8 +74,8 @@ else
 					error('Number of elements must be 34');
 				end
 			case {'aparc.a2009s', 'destrieux'}
-				if(any(L ~= 75))
-					error('Number of elements must be 75');
+				if(any(L ~= 74))
+					error('Number of elements must be 74');
 				end
 			case 'dkt'
 				if(any(L ~= 31))
