@@ -11,6 +11,7 @@ options.SurfType = 'inflated';
 options.MedialLateralLabels = true;
 options.LabelColour = 'w';
 options.BackgroundTextColour = 'w';
+options.PatchProps = [];
 
 OtherArgs = {};
 
@@ -34,7 +35,8 @@ for z = 1:2:length(Args)
 					options.MedialLateralLabels = Args{z + 1};
 				case {'labelcolour', 'labelcolor'}
 					options.LabelColour = Args{z + 1};
-					
+				case 'patchprops'
+					options.PatchProps = Args{z + 1};
 				otherwise
 					OtherArgs = [OtherArgs; Args{z}; Args{z + 1}];
 			end
@@ -95,6 +97,7 @@ if(~isempty(options.MainTitle))
 		error('MainTitle must be a string');
 	end
 end
+
 
 NonSignificantColour = repmat(0.25, 1, 3);
 CMAPSize = 256;
