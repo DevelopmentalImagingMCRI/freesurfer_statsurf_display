@@ -85,6 +85,10 @@ Patches = zeros(2, 2);
 
 PatchProps = {'EdgeColor', 'none', 'AmbientStrength', 0.8, 'SpecularStrength', 0.4, 'FaceColor', 'interp'};
 
+if(~isempty(options.PatchProps))
+	PatchProps = [PatchProps, options.PatchProps];
+end
+
 for HemiIDX = 1:length(Hemis)
 	AX(HemiIDX, 1) = subplot(2, 2, 1 + (HemiIDX - 1) * 2);
 	Patches(HemiIDX, 1) = patch('Vertices', FSAverageV{HemiIDX}, 'Faces', FSAverageF{HemiIDX}, 'FaceVertexCData', FaceVertexCData{HemiIDX}, PatchProps{:});

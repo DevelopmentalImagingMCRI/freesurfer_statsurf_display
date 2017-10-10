@@ -28,6 +28,7 @@ function [AX, LegAX] = freesurfer_statsurf_fsrgb(ValuesMask, FreesurferSeedType,
 %	'Lateral' on the left and right of the figure, respectively
 %	'SurfType' (string): 'white', 'pial', or 'inflated' will use that
 %	surface for display. 'inflated' by default. Only 'inflated' is annotated.
+%	'PatchProps' (cell): NAME/VALUE pairs of patch properties appended to defaults. See "Patch Properties" in "doc patch".
 % NOTES
 % Each element of the vectors in PValues and TValues point to a structure
 % used in the parcellation scheme (FreesurferSeedType). The labels are

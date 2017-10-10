@@ -26,7 +26,7 @@ function [AX, LegAX] = freesurfer_statsurf_effectsize(EffectSizes, EffectSizesMa
 %	this parameter is not given
 %	'MainTitle' (string): optional title to be placed at the top of the
 %	middle of the plot, if [] this parameter is ignored
-%	'ShortAPARCLabels' (logical): whether to use abbreviated aparc
+%	'UseShortLabels' (logical): whether to use abbreviated aparc
 %	labels on the regions themselves rather than use boxes and arrows
 %	'NoLabels' (logical): whether to not use labels at all
 %	'MedialLateralLabels' (logical): whether to place 'Medial' and
@@ -38,6 +38,7 @@ function [AX, LegAX] = freesurfer_statsurf_effectsize(EffectSizes, EffectSizesMa
 %	large effect sizes
 %	'LargestEffectSize' [1]: the largest effect size to plot, larger values
 %	will be clamped. 1.5 by default
+%	'PatchProps' (cell): NAME/VALUE pairs of patch properties appended to defaults. See "Patch Properties" in "doc patch".
 % NOTES
 % Each element of the vectors in PValues and TValues point to a structure
 % used in the parcellation scheme (FreesurferSeedType). The labels are
