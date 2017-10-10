@@ -120,8 +120,10 @@ if(~ischar(options.LabelColour) || ~isscalar(options.LabelColour))
 	error('LabelColour must be a single char');
 end
 
-if(~iscell(options.PatchProps))
-	error('PatchProps must be a cell array');
+if(~isempty(options.PatchProps))
+	if(~iscell(options.PatchProps))
+		error('PatchProps must be a cell array');
+	end
 end
 	
 NonSignificantColour = repmat(0.25, 1, 3);
