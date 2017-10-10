@@ -92,13 +92,38 @@ else
 	end
 end
 
+% type check all arguments
+
 if(~isempty(options.MainTitle))
 	if(~ischar(options.MainTitle))
 		error('MainTitle must be a string');
 	end
 end
 
+LogicalScalarFields = {'UseShortLabels', 'NoLabels', 'NoLegend', 'MedialLateralLabels'};
 
+for z = 1:length(LogicalScalarFields)
+	CurField = LogicalScalarFields{z};
+	
+	if(~islogical(options.(CurField)) || ~isscalar(options.(CurField)))
+		error([CurField ' option must be a logical scalar']);
+	end
+end
+
+SupportedSurfTypes = {'white', 'pial', 'inflated'};
+
+if(~ismember(options.SurfType,SupportedSurfTypes))
+	error(['SurfType must be one of the following:' sprintf(' ''%s''', SupportedSurfTypes{:})]);
+end
+
+if(~ischar(options.LabelColour) || ~isscalar(options.LabelColour))
+	error('LabelColour must be a single char');
+end
+
+if(~iscell(options.PatchProps))
+	error('PatchProps must be a cell array');
+end
+	
 NonSignificantColour = repmat(0.25, 1, 3);
 CMAPSize = 256;
 
