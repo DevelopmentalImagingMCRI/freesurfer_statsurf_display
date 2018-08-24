@@ -64,5 +64,9 @@ end
 %freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData,  FreesurferSeedType, ...
 %	ValuesMask, [], [], MainTitle, SurfType, [], [], [], UseShortLabels, NoLabels, NoLegend, MedialLateralLabels);
 
+if ~strcmp(options.SurfType, 'inflated')
+	options.NoLabels = true;
+end
+
 freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData, FreesurferSeedType, ...
 	ValuesMask, [], [], [], [], options);
