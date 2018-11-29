@@ -79,8 +79,12 @@ end
 
 
 if ~isempty(options.ValueLimits)
-	CMAP = jet(CMAPSize);
-	CMAPX = linspace(options.ValueLimits(1), options.ValueLimits(2), CMAPSize);
+	if options.ValueLimits(1) < 0 && options.ValueLimits(2) > 0
+		[CMAP, ~, CMAPX] = bluewhitered_image(CMAPSize, options.ValueLimits);
+	else
+		CMAP = parula(CMAPSize);
+		CMAPX = linspace(options.ValueLimits(1), options.ValueLimits(2), CMAPSize);
+	end
 else
 	AllValues = cat(2, Values{:});
 	if(all(AllValues(:) > 0) || all(AllValues(:) < 0))

@@ -7,6 +7,7 @@ options.MainTitle = [];
 options.UseShortLabels = false;
 options.NoLabels = false;
 options.NoLegend = false;
+options.LegendNoZero = false;
 options.SurfType = 'inflated';
 options.MedialLateralLabels = true;
 options.LabelColour = 'w';
@@ -29,6 +30,8 @@ for z = 1:2:length(Args)
 					options.NoLabels = Args{z + 1};
 				case 'nolegend'
 					options.NoLegend = Args{z + 1};
+				case 'legendnozero'
+					options.LegendNoZero = Args{z + 1};
 				case 'surftype'
 					options.SurfType = Args{z + 1};
 				case {'medlatlabels', 'mediallaterallabels'}
