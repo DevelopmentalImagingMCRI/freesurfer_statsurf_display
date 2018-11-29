@@ -161,7 +161,11 @@ end
 
 if options.MedialLateralLabels
 	
-	if ~verLessThan('matlab', 'R2016a')
+	if ~verLessThan('matlab', 'R2017b')
+		disp('here');
+		LeftX = -0.5;
+		RightX = 1.51;
+	elseif ~verLessThan('matlab', 'R2016a')
 		if ~options.UseShortLabels
 			switch(computer)
 				case 'GLNXA64'
@@ -175,13 +179,31 @@ if options.MedialLateralLabels
 			LeftX = -1;
 			RightX = 2;
 		end
+
 	else
 		LeftX = -0.2;
 		RightX = 1.21;
 	end
-	T = {'FontSize', 20, 'Color', options.BackgroundTextColour, 'Units', 'normalized', 'HorizontalAlignment', 'center'};
-	text( LeftX, 0.275,  'Medial', 'Parent', AX(1, 1), 'Rotation',  90, T{:});
-	text(RightX, 0.275, 'Lateral', 'Parent', AX(1, 2), 'Rotation', 270, T{:});
+	T = {'EdgeColor', 'none', 'FontSize', 20, 'Color', options.BackgroundTextColour, 'Units', 'normalized', 'HorizontalAlignment', 'center'};
+	%text( LeftX, 0.275,  'Medial', 'Parent', AX(1, 1), 'Rotation',  90, T{:});
+	%text(RightX, 0.275, 'Lateral', 'Parent', AX(1, 2), 'Rotation', 270, T{:});
+	
+	TopLAXPos = get(AX(1, 1), 'Position');
+	TopRAXPos = get(AX(1, 2), 'Position');
+	BotLAXPos = get(AX(2, 1), 'Position');
+	BotRAXPos = get(AX(2, 2), 'Position');
+	
+	%annotation('textbox', [0, BotLAXPos(2), TopLAXPos(1), TopLAXPos(2) + TopLAXPos(4) - BotLAXPos(2)], ...
+	%	'String', 'Medial', T{:});
+	T = {'HeadStyle','none','LineStyle', 'none', 'FontSize', 20, 'TextColor', options.BackgroundTextColour, 'HorizontalAlignment', 'center'};
+	T = {'FontSize', 20, 'TextColor', options.BackgroundTextColour, 'HorizontalAlignment', 'center'};
+	XX = [TopLAXPos(1) + 0.05, TopLAXPos(1) - 0.01 + 0.1];
+	YY = repmat((TopLAXPos(2) + TopLAXPos(4) + BotLAXPos(2)) / 2, 1, 2);
+	annotation('textarrow', XX, YY, 'String', 'Medial', T{:}, 'TextRotation', 90);
+	XX = [TopRAXPos(1) + TopRAXPos(3) - 0.07, TopRAXPos(1)];
+	YY = repmat((TopRAXPos(2) + TopRAXPos(4) + BotRAXPos(2)) / 2, 1, 2);
+	annotation('textarrow', XX, YY, 'String', 'Lateral', T{:}, 'TextRotation', 270);
+	
 end
 
 % now put the PA arrows and LH and RH labels
