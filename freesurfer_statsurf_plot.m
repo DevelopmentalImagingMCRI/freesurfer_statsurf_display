@@ -161,29 +161,37 @@ end
 
 if options.MedialLateralLabels
 	
-	if ~verLessThan('matlab', 'R2017b')
-		disp('here');
-		LeftX = -0.5;
-		RightX = 1.51;
-	elseif ~verLessThan('matlab', 'R2016a')
-		if ~options.UseShortLabels
-			switch(computer)
-				case 'GLNXA64'
-					LeftX = -1.2;
-					RightX = 2.21;
-				otherwise
-					LeftX = -1.75;
-					RightX = 2.5;
-			end
-		else
-			LeftX = -1;
-			RightX = 2;
-		end
-
+% 	if ~verLessThan('matlab', 'R2017b')
+% 		%disp('here');
+% 		
+% 	elseif ~verLessThan('matlab', 'R2016a')
+% 		if ~options.UseShortLabels
+% 			switch(computer)
+% 				case 'GLNXA64'
+% 					LeftX = -1.2;
+% 					RightX = 2.21;
+% 				otherwise
+% 					LeftX = -1.75;
+% 					RightX = 2.5;
+% 			end
+% 		else
+% 			LeftX = -1;
+% 			RightX = 2;
+% 		end
+% 
+% 	else
+% 		LeftX = -0.2;
+% 		RightX = 1.21;
+% 	end
+	
+	if ~options.UseShortLabels
+		LeftX = -0.12;
+		RightX = 0.02;
 	else
-		LeftX = -0.2;
-		RightX = 1.21;
+		LeftX = 0.01;
+		RightX = -0.04;
 	end
+
 	T = {'EdgeColor', 'none', 'FontSize', 20, 'Color', options.BackgroundTextColour, 'Units', 'normalized', 'HorizontalAlignment', 'center'};
 	%text( LeftX, 0.275,  'Medial', 'Parent', AX(1, 1), 'Rotation',  90, T{:});
 	%text(RightX, 0.275, 'Lateral', 'Parent', AX(1, 2), 'Rotation', 270, T{:});
@@ -197,10 +205,10 @@ if options.MedialLateralLabels
 	%	'String', 'Medial', T{:});
 	T = {'HeadStyle','none','LineStyle', 'none', 'FontSize', 20, 'TextColor', options.BackgroundTextColour, 'HorizontalAlignment', 'center'};
 	T = {'FontSize', 20, 'TextColor', options.BackgroundTextColour, 'HorizontalAlignment', 'center'};
-	XX = [TopLAXPos(1) + 0.05, TopLAXPos(1) - 0.01 + 0.1];
+	XX = [TopLAXPos(1) + LeftX / 2, TopLAXPos(1) + LeftX];
 	YY = repmat((TopLAXPos(2) + TopLAXPos(4) + BotLAXPos(2)) / 2, 1, 2);
 	annotation('textarrow', XX, YY, 'String', 'Medial', T{:}, 'TextRotation', 90);
-	XX = [TopRAXPos(1) + TopRAXPos(3) - 0.07, TopRAXPos(1)];
+	XX = [TopRAXPos(1) + TopRAXPos(3) + RightX, TopRAXPos(1)];
 	YY = repmat((TopRAXPos(2) + TopRAXPos(4) + BotRAXPos(2)) / 2, 1, 2);
 	annotation('textarrow', XX, YY, 'String', 'Lateral', T{:}, 'TextRotation', 270);
 	
