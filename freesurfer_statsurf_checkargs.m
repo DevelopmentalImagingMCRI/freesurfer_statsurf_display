@@ -13,6 +13,7 @@ options.MedialLateralLabels = true;
 options.LabelColour = 'w';
 options.BackgroundTextColour = 'w';
 options.PatchProps = [];
+options.HorizontalCompact = false;
 
 OtherArgs = {};
 
@@ -40,6 +41,8 @@ for z = 1:2:length(Args)
 					options.LabelColour = Args{z + 1};
 				case 'patchprops'
 					options.PatchProps = Args{z + 1};
+                case 'horizontalcompact'
+                    options.HorizontalCompact = Args{z + 1};
 				otherwise
 					OtherArgs = [OtherArgs; Args{z}; Args{z + 1}];
 			end

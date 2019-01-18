@@ -37,6 +37,8 @@ function [varargout] = freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVert
     'superiorparietal', 'superiortemporal', 'supramarginal', ...
     'transversetemporal', 'insula'});
 
+HorizontalCompactNudge = 0.07;
+
 if options.UseShortLabels
 	APARCShortLabels = {'BSTS', 'CAC', 'CMF', 'CUN', 'ENT', 'FUS', ...
 				'INFP', 'IT', 'ISTC', 'LOCC', 'LORB', 'LIN', 'MORB', 'MT', ...
@@ -61,7 +63,7 @@ switch(FreesurferSeedType)
 end
 
 if isempty(ValuesMask) && ismember(FreesurferSeedType, {'aparc', 'dkt'})
-		ValuesMask = cellfun(@(x) (true(size(x))), RegionLabels, 'UniformOutput', false);
+	ValuesMask = cellfun(@(x) (true(size(x))), RegionLabels, 'UniformOutput', false);
 end
 
 Hemis = {'lh', 'rh'};
@@ -106,18 +108,42 @@ for HemiIDX = 1:length(Hemis)
 	camlight;
 	zoom(ZoomFactor);
 end
+if ~verLessThan('matlab', 'R2016a')
+	set(AX, 'Clipping', 'off');
+end
+keyboard;
 UpNudge = 0.2;
-
+disp('At start');
+for z = 1:numel(AX)
+    get(AX(z), 'Position')
+end
 for z = 1:2
 	AXPos = get(AX(2, z), 'Position');
 	AXPos(2) = AXPos(2) + UpNudge;
 	set(AX(2, z), 'Position', AXPos);
 end
+keyboard;
+if options.HorizontalCompact
+    for z = 1:2
+        AXPos = get(AX(z, 1), 'Position');
+        AXPos(1) = AXPos(1) + HorizontalCompactNudge;
+        set(AX(z, 1), 'Position', AXPos);
 
+        AXPos = get(AX(z, 2), 'Position');
+        AXPos(1) = AXPos(1) - HorizontalCompactNudge;
+        set(AX(z, 2), 'Position', AXPos);
+    end
+end
+%keyboard;
+disp('At start');
+for z = 1:numel(AX)
+    get(AX(z), 'Position')
+end
+keyboard;
 if ~verLessThan('matlab', 'R2016a')
 	set(AX, 'Clipping', 'off');
 end
-
+keyboard;
 DoPositionRectangles = false;
 
 if DoPositionRectangles
@@ -159,10 +185,10 @@ if ~isempty(CMAPX) && ~options.NoLegend
 end
 
 
-if options.MedialLateralLabels
+if options.MedialLateralLabels && ~options.HorizontalCompact
 	
 	if ~verLessThan('matlab', 'R2017b')
-		disp('here');
+		%disp('here');
 		LeftX = -0.5;
 		RightX = 1.51;
 	elseif ~verLessThan('matlab', 'R2016a')
@@ -214,9 +240,14 @@ BottomLeftAXPos = get(AX(2, 1), 'Position');
 BottomRightAXPos = get(AX(2, 2), 'Position');
 
 ArrowProps = {'Color', options.BackgroundTextColour, 'LineWidth', 2};
-TextProps = {'Color', options.BackgroundTextColour, 'LineStyle', 'none', 'EdgeColor', options.LabelColour, 'VerticalAlignment', 'middle', 'FontSize', 20};
+if options.HorizontalCompact
+    TextFontSize = 28;
+else
+    TextFontSize = 20;
+end
+TextProps = {'Color', options.BackgroundTextColour, 'LineStyle', 'none', 'EdgeColor', options.LabelColour, 'VerticalAlignment', 'middle', 'FontSize', 28};
 
-ArrowFigWidthProp = 0.15;
+ArrowFigWidthProp = 0.35;
 if(options.UseShortLabels)
 	ArrowFigBotNudge = 0.075;
 	ArrowFigTopNudge = 0.135;
@@ -225,6 +256,7 @@ else
 	ArrowFigTopNudge = 0.095;
 end
 AnnotHeight = 0.2;
+
 
 annotation('textbox', 'Position', [(TopLeftAXPos(1) + TopRightAXPos(1) + TopRightAXPos(3)) / 2 - 0.01, ...
 	TopLeftAXPos(2) + TopLeftAXPos(4) - ArrowFigTopNudge, ...
@@ -362,7 +394,7 @@ if(~options.NoLabels)
 								TextBoxesCentroid = [CurX(2), CurY(2)];
 							elseif(HasTextBox)
 								% if there are textboxes but no arrows, then find
-								% the centroid of the textboes
+								% the centroid of the textboxes
 
 								TextBoxesCentroid = zeros(NumTextBoxes, 2);
 								for CurTextBox = 1:NumTextBoxes
@@ -372,8 +404,14 @@ if(~options.NoLabels)
 									TextBoxesCentroid(CurTextBox, :) = [TextBoxPosition(1) + TextBoxPosition(3) / 2, TextBoxPosition(2) + TextBoxPosition(4) / 2];
 								end
 								TextBoxesCentroid = mean(TextBoxesCentroid, 1);
-							end
-
+                            end
+                            if options.HorizontalCompact
+                                if TextBoxesCentroid(1) < 0.5
+                                    TextBoxesCentroid(1) = TextBoxesCentroid(1) + HorizontalCompactNudge;
+                                else
+                                    TextBoxesCentroid(1) = TextBoxesCentroid(1) - HorizontalCompactNudge;
+                                end
+                            end
 							TextBoxWidthHeight = [0.2, 0.1];
 							annotation('textbox', 'Position', [TextBoxesCentroid(1) - TextBoxWidthHeight(1) / 2, TextBoxesCentroid(2) - TextBoxWidthHeight(2) / 2, TextBoxWidthHeight], ...
 								'String', ShortRegionLabels{CurField}, LabelTextBoxPropsDone{:});
@@ -418,3 +456,10 @@ if(~options.NoLabels)
 		end
 	end
 end
+
+disp('At end');
+for z = 1:numel(AX)
+    get(AX(z), 'Position')
+end
+
+keyboard;
