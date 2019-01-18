@@ -14,6 +14,7 @@ options.LabelColour = 'w';
 options.BackgroundTextColour = 'w';
 options.PatchProps = [];
 options.SurfaceSource = 'fs6';
+options.HorizontalCompact = false;
 
 OtherArgs = {};
 
@@ -43,6 +44,8 @@ for z = 1:2:length(Args)
 					options.PatchProps = Args{z + 1};
 				case 'surfacesource'
 					options.SurfaceSource = lower(Args{z + 1});
+                case 'horizontalcompact'
+                    options.HorizontalCompact = Args{z + 1};
 				otherwise
 					OtherArgs = [OtherArgs; Args{z}; Args{z + 1}];
 			end
