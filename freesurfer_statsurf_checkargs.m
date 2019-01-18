@@ -13,6 +13,7 @@ options.MedialLateralLabels = true;
 options.LabelColour = 'w';
 options.BackgroundTextColour = 'w';
 options.PatchProps = [];
+options.SurfaceSource = 'fs6';
 
 OtherArgs = {};
 
@@ -40,6 +41,8 @@ for z = 1:2:length(Args)
 					options.LabelColour = Args{z + 1};
 				case 'patchprops'
 					options.PatchProps = Args{z + 1};
+				case 'surfacesource'
+					options.SurfaceSource = lower(Args{z + 1});
 				otherwise
 					OtherArgs = [OtherArgs; Args{z}; Args{z + 1}];
 			end
@@ -49,9 +52,16 @@ for z = 1:2:length(Args)
 	end
 end
 
-FreesurferSeedTypes = {'aparc', 'aparc.a2009s', 'destreiux', 'dkt', 'voneconomo'};
+SupportedSurfaceSources = {'fs6', 'mcribs'};
 
-if ~ismember(FreesurferSeedType, FreesurferSeedTypes)
+if ~ismember(options.SurfaceSource, SupportedSurfaceSources)
+	error('Unsupported seed type');
+end
+
+FreesurferSeedTypes.fs6 = {'aparc', 'desikan', 'aparc.a2009s', 'destreiux', 'dkt', 'voneconomo'};
+FreesurferSeedTypes.mcribs = {'aparc', 'desikan', 'dkt'};
+
+if ~ismember(FreesurferSeedType, FreesurferSeedTypes.(options.SurfaceSource))
 	error('Unsupported seed type');
 end
 
@@ -74,7 +84,7 @@ else
 		L = cellfun(@numel, Values{z});
 		
 		switch(lower(FreesurferSeedType))
-			case 'aparc'
+			case {'aparc', 'desikan'}
 				if(any(L ~= 34))
 					error('Number of elements must be 34');
 				end
@@ -128,8 +138,10 @@ if(~isempty(options.PatchProps))
 		error('PatchProps must be a cell array');
 	end
 end
-	
+
+
+
 NonSignificantColour = repmat(0.25, 1, 3);
 CMAPSize = 256;
 
-[FSAverageV, FSAverageF, ValueVertexIDX, RGB] = freesurfer_statsurf_loadsurfaces(options.SurfType, FreesurferSeedType);
+[FSAverageV, FSAverageF, ValueVertexIDX, RGB] = freesurfer_statsurf_loadsurfaces(options.SurfType, FreesurferSeedType, options.SurfaceSource);

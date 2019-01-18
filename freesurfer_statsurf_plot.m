@@ -73,9 +73,17 @@ set(gcf, 'Color', 'k', 'Position', FigPos, 'PaperPosition', FigPos, 'PaperUnits'
 
 switch(options.SurfType)
 	case {'pial', 'white'}
-		ZoomFactor = 2;
+		if strcmp(options.SurfaceSource, 'fs6')
+			ZoomFactor = 2;
+		else
+			ZoomFactor = 1;
+		end
 	case 'inflated'
-		ZoomFactor = 2;
+		if strcmp(options.SurfaceSource, 'fs6')
+			ZoomFactor = 2;
+		else
+			ZoomFactor = 1.25;
+		end
 end
 %#$ZoomFactor = 2; % for inflated
 %ZoomFactor = 1; % for pial
@@ -337,7 +345,13 @@ if(~options.NoLabels)
 		% Create textbox
 		%LabelTextBoxPropsDone = [LabelTextBoxProps {'Color', options.LabelColour}];
 		%RectProps
-		[TextBoxes, Arrows, Rectangles] = freesurfer_statsurf_textboxes(FreesurferSeedType);
+		switch(options.SurfaceSource)
+			case 'fs6'
+				freesurfer_statsurf_textboxes_func = @freesurfer_statsurf_textboxes_fs6;
+			case 'mcribs'
+				freesurfer_statsurf_textboxes_func = @freesurfer_statsurf_textboxes_mcribs;
+		end
+		[TextBoxes, Arrows, Rectangles] = freesurfer_statsurf_textboxes_func(FreesurferSeedType);
 		if(iscell(ShortRegionLabels))
 			ShortRegionLabelsLegendStrings = cell(1000, 1);
 			ShortRegionLabelsLegendStringsIDX = 1;

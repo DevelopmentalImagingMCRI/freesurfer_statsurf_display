@@ -1,4 +1,4 @@
-function [FSAverageV, FSAverageF, ValueVertexIDX, RGB] = freesurfer_statsurf_loadsurfaces(SurfType, FreesurferSeedType)
+function [FSAverageV, FSAverageF, ValueVertexIDX, RGB] = freesurfer_statsurf_loadsurfaces(SurfType, FreesurferSeedType, SurfaceSource)
 
 % load freesurfer average surfaces
 
@@ -28,7 +28,7 @@ Hemis = {'lh', 'rh'};
 	for HemiIDX = 1:length(Hemis)
 		Hemi = Hemis{HemiIDX};
 	
-		[FSAverageV{HemiIDX}, FSAverageF{HemiIDX}] = read_freesurfer_surface(fullfile(FreesurferSubjectsDir, 'fsaverage', 'surf', [Hemi '.' SurfType]));
+		[FSAverageV{HemiIDX}, FSAverageF{HemiIDX}] = read_freesurfer_surface(fullfile(FreesurferSubjectsDir, ['fsaverage_' SurfaceSource], 'surf', [Hemi '.' SurfType]));
 		FSAverageF{HemiIDX} = uint32(FSAverageF{HemiIDX});
 	end
 	
@@ -41,7 +41,7 @@ Hemis = {'lh', 'rh'};
 	
 	% set up invalid structures for each seed type
 	switch(lower(FreesurferSeedType))
-		case 'aparc'
+		case {'aparc', 'desikan'}
 			InvalidStructs = {'unknown', 'corpuscallosum'};
 			LabelName = 'aparc';
 		case {'aparc.a2009s', 'destrieux'}
@@ -59,7 +59,7 @@ Hemis = {'lh', 'rh'};
 	for HemiIDX = 1:length(Hemis)
 		Hemi = Hemis{HemiIDX};
 			
-		[~, AnnotLabel{HemiIDX}, AnnotTable{HemiIDX}] = freesurfer_read_annot(fullfile(FreesurferSubjectsDir, 'fsaverage', 'label', [Hemi '.' LabelName '.annot']));
+		[~, AnnotLabel{HemiIDX}, AnnotTable{HemiIDX}] = freesurfer_read_annot(fullfile(FreesurferSubjectsDir, ['fsaverage_' SurfaceSource], 'label', [Hemi '.' LabelName '.annot']));
 		[~, AnnotSeg{HemiIDX}] = ismember(AnnotLabel{HemiIDX}, AnnotTable{HemiIDX}.table(:, 5));
 		%keyboard;
 		% remove corpuscallosum and unknown from the segmentation
