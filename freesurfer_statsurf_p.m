@@ -34,6 +34,9 @@ function [AX, LegAX] = freesurfer_statsurf_p(PValues, TValues, FreesurferSeedTyp
 %	'MedialLateralLabels' (logical): whether to place 'Medial' and
 %	'Lateral' on the left and right of the figure, respectively
 %	'PatchProps' (cell): NAME/VALUE pairs of patch properties appended to defaults. See "Patch Properties" in "doc patch".
+%   'BackgroundNoCurv' (logical): affects "background" or non-significant vertices, their colouring:
+%   if true, use solid grey
+%   if false (default), use the average surface curvature
 % NOTES
 % Each element of the vectors in PValues and TValues point to a structure
 % used in the parcellation scheme (FreesurferSeedType). The labels are
@@ -47,7 +50,7 @@ Values = {PValues, TValues};
 
 [options, ...
 NonSignificantColour, CMAPSize, ... 
-FSAverageV, FSAverageF, ValueVertexIDX, ~, ...
+FSAverageV, FSAverageF, FSAverageCurv, ValueVertexIDX, ~, ...
 OtherArgs] = freesurfer_statsurf_checkargs(Values, FreesurferSeedType, varargin);
 
 options.GroupLabels = {'Group 1', 'Group 2'};
@@ -119,7 +122,7 @@ for HemiIDX = 1:length(Hemis)
 	% values non-significant
 	C(isnan(C)) = 1;
 	
-	M = abs(C > 1);
+	M = abs(C) > 1;
 	if(any(M))
 		disp('Warning, p-values outside 0 <= p <= 1, making those p = 1');
 		C(M) = 1;
@@ -157,6 +160,12 @@ else
 	CMAP = [PosCMAP(1, :); PosCMAP; NonSignificantColour; NonSignificantColour];
 end
 CMAPIMG = permute(repmat(reshape(CMAP, [size(CMAP, 1), 1, 3]), [1, 50, 1]), [2 1 3]);
+
+if ~options.BackgroundNoCurv
+    FaceVertexCData = freesurfer_statsurf_nonsigwithcurv(FaceVertexCData, FSAverageCurv, NonSignificantColour);
+end
+
+%keyboard;
 
 ValuesMask = cellfun(@(x) (x <= 0.05), PValues, 'UniformOutput', false);
 freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData, FreesurferSeedType, ...

@@ -37,6 +37,9 @@ function [AX, LegAX] = freesurfer_statsurf_scalar(Values, ValuesMask, Freesurfer
 %	'ScalarName' (string): the name of the variable. Used to annotated the
 %	legend.
 %	'PatchProps' (cell): NAME/VALUE pairs of patch properties appended to defaults. See "Patch Properties" in "doc patch".
+%   'BackgroundNoCurv' (logical): affects "background" or non-significant vertices, their colouring:
+%   if true, use solid grey
+%   if false (default), use the average surface curvature
 % NOTES
 % Each element of the vectors in PValues and TValues point to a structure
 % used in the parcellation scheme (FreesurferSeedType). The labels are
@@ -141,6 +144,9 @@ end
 
 options.LegendLabel = options.ScalarName;
 
+if ~options.BackgroundNoCurv
+    FaceVertexCData = freesurfer_statsurf_nonsigwithcurv(FaceVertexCData, FSAverageCurv, NonSignificantColour);
+end
 
 
 %freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData,  FreesurferSeedType, ...

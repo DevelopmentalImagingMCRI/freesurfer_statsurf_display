@@ -34,6 +34,9 @@ function [AX, LegAX] = freesurfer_statsurf_rsq(RSQ, RSQMask, FreesurferSeedType,
 %	'ScalarName' (string): the name of the variable. Used to annotated the
 %	legend. '\itr^2' by default
 %	'PatchProps' (cell): NAME/VALUE pairs of patch properties appended to defaults. See "Patch Properties" in "doc patch".
+%   'BackgroundNoCurv' (logical): affects "background" or non-significant vertices, their colouring:
+%   if true, use solid grey
+%   if false (default), use the average surface curvature
 % NOTES
 % Each element of the vectors in PValues and TValues point to a structure
 % used in the parcellation scheme (FreesurferSeedType). The labels are
@@ -45,7 +48,7 @@ function [AX, LegAX] = freesurfer_statsurf_rsq(RSQ, RSQMask, FreesurferSeedType,
 
 [options, ...
 NonSignificantColour, CMAPSize, ... 
-FSAverageV, FSAverageF, ValueVertexIDX, ~, ...
+FSAverageV, FSAverageF, FSAverageCurv, ValueVertexIDX, ~, ...
 OtherArgs] = freesurfer_statsurf_checkargs({RSQ, RSQMask}, FreesurferSeedType, varargin);
 
 options.ScalarName = '\itr^2';
@@ -102,6 +105,10 @@ end
 options.LegendLabel = options.ScalarName;
 LegendXTick = [0 1];
 LegendXTickLabels = cellstr(num2str([min(CMAPX), max(CMAPX)]', '%.2f'));
+if ~options.BackgroundNoCurv
+    FaceVertexCData = freesurfer_statsurf_nonsigwithcurv(FaceVertexCData, FSAverageCurv, NonSignificantColour);
+end
+
 
 freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData, FreesurferSeedType, ...
 	RSQMask, CMAPX, CMAPIMG, LegendXTick, LegendXTickLabels, options);

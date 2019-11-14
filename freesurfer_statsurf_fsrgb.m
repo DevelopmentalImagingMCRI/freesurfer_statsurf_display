@@ -29,6 +29,9 @@ function [AX, LegAX] = freesurfer_statsurf_fsrgb(ValuesMask, FreesurferSeedType,
 %	'SurfType' (string): 'white', 'pial', or 'inflated' will use that
 %	surface for display. 'inflated' by default. Only 'inflated' is annotated.
 %	'PatchProps' (cell): NAME/VALUE pairs of patch properties appended to defaults. See "Patch Properties" in "doc patch".
+%   'BackgroundNoCurv' (logical): affects "background" or non-significant vertices, their colouring:
+%   if true, use solid grey
+%   if false (default), use the average surface curvature
 % NOTES
 % Each element of the vectors in PValues and TValues point to a structure
 % used in the parcellation scheme (FreesurferSeedType). The labels are
@@ -42,7 +45,7 @@ Values = {ValuesMask};
 
 [options, ...
 NonSignificantColour, ~, ... 
-FSAverageV, FSAverageF, ValueVertexIDX, FaceVertexCData, ...
+FSAverageV, FSAverageF, FSAverageCurv, ValueVertexIDX, FaceVertexCData, ...
 ~] = freesurfer_statsurf_checkargs(Values, FreesurferSeedType, varargin);
 
 if ~isempty(ValuesMask)
@@ -63,6 +66,9 @@ end
 
 %freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData,  FreesurferSeedType, ...
 %	ValuesMask, [], [], MainTitle, SurfType, [], [], [], UseShortLabels, NoLabels, NoLegend, MedialLateralLabels);
+if ~options.BackgroundNoCurv
+    FaceVertexCData = freesurfer_statsurf_nonsigwithcurv(FaceVertexCData, FSAverageCurv, NonSignificantColour);
+end
 
 if ~strcmp(options.SurfType, 'inflated')
 	options.NoLabels = true;

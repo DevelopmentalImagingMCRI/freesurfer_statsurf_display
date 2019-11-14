@@ -1,6 +1,6 @@
 function [options, ...
 NonSignificantColour, CMAPSize, ... % constants
-FSAverageV, FSAverageF, ValueVertexIDX, RGB, ... % from loadsurfaces
+FSAverageV, FSAverageF, FSAverageCurv, ValueVertexIDX, RGB, ... % from loadsurfaces
 OtherArgs] = freesurfer_statsurf_checkargs(Values, FreesurferSeedType, Args)
 
 options.MainTitle = [];
@@ -15,6 +15,7 @@ options.BackgroundTextColour = 'w';
 options.PatchProps = [];
 options.SurfaceSource = 'fs6';
 options.HorizontalCompact = false;
+options.BackgroundNoCurv = false;
 
 OtherArgs = {};
 
@@ -46,6 +47,8 @@ for z = 1:2:length(Args)
 					options.SurfaceSource = lower(Args{z + 1});
                 case 'horizontalcompact'
                     options.HorizontalCompact = Args{z + 1};
+                case 'backgroundnocurv'
+                    options.BackgroundNoCurv = Args{z + 1};
 				otherwise
 					OtherArgs = [OtherArgs; Args{z}; Args{z + 1}];
 			end
@@ -148,4 +151,4 @@ end
 NonSignificantColour = repmat(0.25, 1, 3);
 CMAPSize = 256;
 
-[FSAverageV, FSAverageF, ValueVertexIDX, RGB] = freesurfer_statsurf_loadsurfaces(options.SurfType, FreesurferSeedType, options.SurfaceSource);
+[FSAverageV, FSAverageF, FSAverageCurv, ValueVertexIDX, RGB] = freesurfer_statsurf_loadsurfaces(options.SurfType, FreesurferSeedType, options.SurfaceSource);
