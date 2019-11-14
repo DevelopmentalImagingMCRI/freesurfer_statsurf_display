@@ -264,10 +264,10 @@ if options.MedialLateralLabels && ~options.HorizontalCompact
 	%	'String', 'Medial', T{:});
 	T = {'HeadStyle','none','LineStyle', 'none', 'FontSize', 20, 'TextColor', options.BackgroundTextColour, 'HorizontalAlignment', 'center'};
 	T = {'FontSize', 20, 'TextColor', options.BackgroundTextColour, 'HorizontalAlignment', 'center'};
-	XX = [TopLAXPos(1) + LeftX / 2, TopLAXPos(1) + LeftX]
+	XX = [TopLAXPos(1) + LeftX / 2, TopLAXPos(1) + LeftX];
 	YY = repmat((TopLAXPos(2) + TopLAXPos(4) + BotLAXPos(2)) / 2, 1, 2);
 	annotation('textarrow', XX, YY, 'String', 'Medial', T{:}, 'TextRotation', 90);
-	XX = [TopRAXPos(1) + TopRAXPos(3) + RightX, TopRAXPos(1)]
+	XX = [TopRAXPos(1) + TopRAXPos(3) + RightX, TopRAXPos(1)];
 	YY = repmat((TopRAXPos(2) + TopRAXPos(4) + BotRAXPos(2)) / 2, 1, 2);
 	annotation('textarrow', XX, YY, 'String', 'Lateral', T{:}, 'TextRotation', 270);
 	
