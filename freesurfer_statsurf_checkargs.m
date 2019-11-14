@@ -56,6 +56,7 @@ for z = 1:2:length(Args)
 end
 
 SupportedSurfaceSources = {'fs6', 'mcribs'};
+SupportedSurfaceSources = {'fs6'};
 
 if ~ismember(options.SurfaceSource, SupportedSurfaceSources)
 	error('Unsupported seed type');
