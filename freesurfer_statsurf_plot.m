@@ -119,18 +119,18 @@ end
 if ~verLessThan('matlab', 'R2016a')
 	set(AX, 'Clipping', 'off');
 end
-keyboard;
+%keyboard;
 UpNudge = 0.2;
-disp('At start');
-for z = 1:numel(AX)
-    get(AX(z), 'Position')
-end
+% disp('At start');
+% for z = 1:numel(AX)
+%     get(AX(z), 'Position')
+% end
 for z = 1:2
 	AXPos = get(AX(2, z), 'Position');
 	AXPos(2) = AXPos(2) + UpNudge;
 	set(AX(2, z), 'Position', AXPos);
 end
-keyboard;
+%keyboard;
 if options.HorizontalCompact
     for z = 1:2
         AXPos = get(AX(z, 1), 'Position');
@@ -143,15 +143,15 @@ if options.HorizontalCompact
     end
 end
 %keyboard;
-disp('At start');
-for z = 1:numel(AX)
-    get(AX(z), 'Position')
-end
-keyboard;
-if ~verLessThan('matlab', 'R2016a')
-	set(AX, 'Clipping', 'off');
-end
-keyboard;
+% disp('At start');
+% for z = 1:numel(AX)
+%     get(AX(z), 'Position')
+% end
+%keyboard;
+% if ~verLessThan('matlab', 'R2016a')
+% 	set(AX, 'Clipping', 'off');
+% end
+%keyboard;
 DoPositionRectangles = false;
 
 if DoPositionRectangles
@@ -194,8 +194,9 @@ end
 
 
 if options.MedialLateralLabels && ~options.HorizontalCompact
-	
-<<<<<<< HEAD
+
+% buggy in R2019a
+%f false
 % 	if ~verLessThan('matlab', 'R2017b')
 % 		%disp('here');
 % 		
@@ -219,11 +220,14 @@ if options.MedialLateralLabels && ~options.HorizontalCompact
 % 		RightX = 1.21;
 % 	end
 	
-	if ~options.UseShortLabels
-		LeftX = -0.12;
-		RightX = 0.02;
-=======
-	if ~verLessThan('matlab', 'R2017b')
+	%if ~options.UseShortLabels
+	%	LeftX = -0.12;
+	%	RightX = 0.02;
+    if ~verLessThan('matlab', 'R2019b')
+		%disp('here');
+		LeftX = 0;
+		RightX = 0.01;
+    elseif ~verLessThan('matlab', 'R2017b')
 		%disp('here');
 		LeftX = -0.5;
 		RightX = 1.51;
@@ -242,7 +246,6 @@ if options.MedialLateralLabels && ~options.HorizontalCompact
 			RightX = 2;
 		end
 
->>>>>>> 0dd626b82637aa766edb0a16a7eca48bbcfade08
 	else
 		LeftX = 0.01;
 		RightX = -0.04;
@@ -261,10 +264,10 @@ if options.MedialLateralLabels && ~options.HorizontalCompact
 	%	'String', 'Medial', T{:});
 	T = {'HeadStyle','none','LineStyle', 'none', 'FontSize', 20, 'TextColor', options.BackgroundTextColour, 'HorizontalAlignment', 'center'};
 	T = {'FontSize', 20, 'TextColor', options.BackgroundTextColour, 'HorizontalAlignment', 'center'};
-	XX = [TopLAXPos(1) + LeftX / 2, TopLAXPos(1) + LeftX];
+	XX = [TopLAXPos(1) + LeftX / 2, TopLAXPos(1) + LeftX]
 	YY = repmat((TopLAXPos(2) + TopLAXPos(4) + BotLAXPos(2)) / 2, 1, 2);
 	annotation('textarrow', XX, YY, 'String', 'Medial', T{:}, 'TextRotation', 90);
-	XX = [TopRAXPos(1) + TopRAXPos(3) + RightX, TopRAXPos(1)];
+	XX = [TopRAXPos(1) + TopRAXPos(3) + RightX, TopRAXPos(1)]
 	YY = repmat((TopRAXPos(2) + TopRAXPos(4) + BotRAXPos(2)) / 2, 1, 2);
 	annotation('textarrow', XX, YY, 'String', 'Lateral', T{:}, 'TextRotation', 270);
 	
@@ -501,9 +504,9 @@ if(~options.NoLabels)
 	end
 end
 
-disp('At end');
-for z = 1:numel(AX)
-    get(AX(z), 'Position')
-end
+% disp('At end');
+% for z = 1:numel(AX)
+%     get(AX(z), 'Position')
+% end
 
-keyboard;
+%keyboard;
