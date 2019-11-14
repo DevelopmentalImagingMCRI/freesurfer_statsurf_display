@@ -93,7 +93,7 @@ clf;
 AX = zeros(2, 2);
 Patches = zeros(2, 2);
 
-PatchProps = {'EdgeColor', 'none', 'AmbientStrength', 0.8, 'SpecularStrength', 0.4, 'FaceColor', 'interp'};
+PatchProps = {'EdgeColor', 'none', 'AmbientStrength', 0.8, 'SpecularStrength', 0.1, 'FaceColor', 'interp'};
 
 if(~isempty(options.PatchProps))
 	PatchProps = [PatchProps, options.PatchProps];
