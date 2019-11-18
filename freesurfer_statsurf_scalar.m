@@ -51,7 +51,7 @@ function [AX, LegAX] = freesurfer_statsurf_scalar(Values, ValuesMask, Freesurfer
 
 [options, ...
 NonSignificantColour, CMAPSize, ... 
-FSAverageV, FSAverageF, ValueVertexIDX, ~, ...
+FSAverageV, FSAverageF, FSAverageCurv, ValueVertexIDX, ~, ...
 OtherArgs] = freesurfer_statsurf_checkargs({Values, ValuesMask}, FreesurferSeedType, varargin);
 
 options.ValueLimits = [];
@@ -75,7 +75,7 @@ for z = 1:2:length(OtherArgs)
 		disp('Last parameter had no value associated with it, ignoring');
 	end
 end
-
+%keyboard;
 if isempty(ValuesMask)
 	ValuesMask = cellfun(@(x) (true(size(x))), Values, 'UniformOutput', false);
 end
