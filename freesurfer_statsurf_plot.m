@@ -66,6 +66,12 @@ if isempty(ValuesMask) && ismember(FreesurferSeedType, {'aparc', 'dkt'})
 	ValuesMask = cellfun(@(x) (true(size(x))), RegionLabels, 'UniformOutput', false);
 end
 
+if options.LargeFonts
+    FontMult = 1.5;
+else
+    FontMult = 1;
+end
+
 Hemis = {'lh', 'rh'};
 
 clf;
@@ -185,10 +191,10 @@ if ~isempty(CMAPX) && ~options.NoLegend
 	%LegendXTickLabels = {'0', ['>= ' num2str(LargestEffectSize, '%.3f')]};
 	for z = 1:length(LegendXTickIDX)
 		text(LegendXTickIDX(z), -1, LegendXTickLabels{z}, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'top', ...
-			'Color', options.BackgroundTextColour);
+			'Color', options.BackgroundTextColour, 'FontSize', 18);
 	end
 	if(~isempty(options.LegendLabel))
-		text(0.5, -1.0, options.LegendLabel, 'Color', options.BackgroundTextColour, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'top', 'FontSize', 24, 'FontName', 'Times', 'Units', 'normalized');
+		text(0.5, -1.0, options.LegendLabel, 'Color', options.BackgroundTextColour, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'top', 'FontSize', 24 * FontMult, 'FontName', 'Times', 'Units', 'normalized');
 	end
 end
 
@@ -251,7 +257,7 @@ if options.MedialLateralLabels && ~options.HorizontalCompact
 		RightX = -0.04;
 	end
 
-	T = {'EdgeColor', 'none', 'FontSize', 20, 'Color', options.BackgroundTextColour, 'Units', 'normalized', 'HorizontalAlignment', 'center'};
+	T = {'EdgeColor', 'none', 'FontSize', 20 * FontMult, 'Color', options.BackgroundTextColour, 'Units', 'normalized', 'HorizontalAlignment', 'center'};
 	%text( LeftX, 0.275,  'Medial', 'Parent', AX(1, 1), 'Rotation',  90, T{:});
 	%text(RightX, 0.275, 'Lateral', 'Parent', AX(1, 2), 'Rotation', 270, T{:});
 	
@@ -262,8 +268,8 @@ if options.MedialLateralLabels && ~options.HorizontalCompact
 	
 	%annotation('textbox', [0, BotLAXPos(2), TopLAXPos(1), TopLAXPos(2) + TopLAXPos(4) - BotLAXPos(2)], ...
 	%	'String', 'Medial', T{:});
-	T = {'HeadStyle','none','LineStyle', 'none', 'FontSize', 20, 'TextColor', options.BackgroundTextColour, 'HorizontalAlignment', 'center'};
-	T = {'FontSize', 20, 'TextColor', options.BackgroundTextColour, 'HorizontalAlignment', 'center'};
+	T = {'HeadStyle','none','LineStyle', 'none', 'FontSize', 20 * FontMult, 'TextColor', options.BackgroundTextColour, 'HorizontalAlignment', 'center'};
+	T = {'FontSize', 20 * FontMult, 'TextColor', options.BackgroundTextColour, 'HorizontalAlignment', 'center'};
 	XX = [TopLAXPos(1) + LeftX / 2, TopLAXPos(1) + LeftX];
 	YY = repmat((TopLAXPos(2) + TopLAXPos(4) + BotLAXPos(2)) / 2, 1, 2);
 	annotation('textarrow', XX, YY, 'String', 'Medial', T{:}, 'TextRotation', 90);
@@ -326,7 +332,8 @@ annotation('doublearrow', [BottomLeftAXPos(1) + BottomLeftAXPos(3) * ArrowFigWid
 annotation('textbox', [BottomLeftAXPos(1), BottomLeftAXPos(2) - ArrowFigBotNudge, BottomLeftAXPos(3) * ArrowFigWidthProp, AnnotHeight], ...
 	'String', 'A', ...
 	TextProps{:}, ...
-	'HorizontalAlignment', 'right');
+	'HorizontalAlignment', 'right', ...
+    'FontSize', 28);
 annotation('textbox', [BottomLeftAXPos(1) + BottomLeftAXPos(3) * (1 - ArrowFigWidthProp), BottomLeftAXPos(2) - ArrowFigBotNudge, BottomLeftAXPos(3) * ArrowFigWidthProp, AnnotHeight], ...
 	'String', 'P', ...
 	TextProps{:}, ...
@@ -365,22 +372,22 @@ if(~isempty(options.MainTitle))
 		T, ...
 		1 - (TopLeftAXPos(2) + TopLeftAXPos(4))], ...
 		'String', options.MainTitle, ...
-		'Color', options.BackgroundTextColour, 'HorizontalAlignment', 'center', 'FontSize', 18, 'VerticalAlignment', 'middle', 'EdgeColor', 'none');
+		'Color', options.BackgroundTextColour, 'HorizontalAlignment', 'center', 'FontSize', 18 * FontMult, 'VerticalAlignment', 'middle', 'EdgeColor', 'none');
 end
 
 if(~options.NoLabels)
 	if(ismember(lower(FreesurferSeedType), {'aparc', 'dkt'}))
 		if(iscell(ShortRegionLabels))
 			FontWeight = 'bold';
-			FontSize = 10;
+			FontSize = 10 * FontMult;
 		else
 			switch(computer)
 					case {'PCWIN64', 'GLNXA64'}
 						FontWeight = 'normal';
-						FontSize = 8;
+						FontSize = 8 * FontMult;
 					otherwise
 						FontWeight = 'bold';
-						FontSize = 10;
+						FontSize = 10 * FontMult;
 			end
 		end
 

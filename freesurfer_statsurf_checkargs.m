@@ -16,6 +16,7 @@ options.PatchProps = [];
 options.SurfaceSource = 'fs6';
 options.HorizontalCompact = false;
 options.BackgroundNoCurv = false;
+options.LargeFonts = false;
 
 OtherArgs = {};
 
@@ -31,6 +32,8 @@ for z = 1:2:length(Args)
 					options.UseShortLabels = Args{z + 1};
 				case 'nolabels'
 					options.NoLabels = Args{z + 1};
+                case 'largefonts'
+					options.LargeFonts = Args{z + 1};
 				case 'nolegend'
 					options.NoLegend = Args{z + 1};
 				case 'legendnozero'
