@@ -56,6 +56,7 @@ OtherArgs] = freesurfer_statsurf_checkargs({Values, ValuesMask}, FreesurferSeedT
 
 options.ValueLimits = [];
 options.ScalarName = [];
+options.KeepBlueAndRedIfOneSign = false;
 
 for z = 1:2:length(OtherArgs)
 	if length(OtherArgs) >= z + 1
@@ -67,6 +68,8 @@ for z = 1:2:length(OtherArgs)
 					options.ScalarName = OtherArgs{z + 1};
 				case 'valuelimits'
 					options.ValueLimits = OtherArgs{z + 1};
+                case 'keepblueandredifonesign'
+                    options.KeepBlueAndRedIfOneSign = OtherArgs{z + 1};
 				otherwise
 					disp(['Unsupported optional option (ignored): ' OtherArgs{z}]);
 			end
@@ -82,7 +85,7 @@ end
 
 
 if ~isempty(options.ValueLimits)
-	if options.ValueLimits(1) < 0 && options.ValueLimits(2) > 0
+	if (options.ValueLimits(1) < 0 && options.ValueLimits(2) > 0) || options.KeepBlueAndRedIfOneSign == true
 		[CMAP, ~, CMAPX] = bluewhitered_image(CMAPSize, options.ValueLimits);
 	else
 		CMAP = parula(CMAPSize);
@@ -90,11 +93,12 @@ if ~isempty(options.ValueLimits)
 	end
 else
 	AllValues = cat(2, Values{:});
-	if(all(AllValues(:) > 0) || all(AllValues(:) < 0))
+    
+	if (min(AllValues(:)) < 0 && max(AllValues(:)) > 0) || options.KeepBlueAndRedIfOneSign == true
+        [CMAP, ~, CMAPX] = bluewhitered_image(CMAPSize, AllValues);
+    else
 		CMAP = jet(CMAPSize);
 		CMAPX = linspace(min(AllValues(:)), max(AllValues(:)), CMAPSize);
-	else
-		[CMAP, ~, CMAPX] = bluewhitered_image(CMAPSize, AllValues);
 	end
 end
 %CMAPIMG = permute(repmat(reshape(CMAP(1:end - 2, :), [size(CMAP, 1) - 2, 1, 3]), [1, 50, 1]), [2 1 3]);
