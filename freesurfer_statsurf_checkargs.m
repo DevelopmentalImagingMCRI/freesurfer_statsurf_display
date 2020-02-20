@@ -52,15 +52,19 @@ for z = 1:2:length(Args)
                     options.HorizontalCompact = Args{z + 1};
                 case 'backgroundnocurv'
                     options.BackgroundNoCurv = Args{z + 1};
-				otherwise
-					OtherArgs = [OtherArgs; Args{z}; Args{z + 1}];
+                otherwise
+                    if iscell(Args{z + 1})
+                        OtherArgs = [OtherArgs; Args{z}; {Args{z + 1}}];
+                    else
+                        OtherArgs = [OtherArgs; Args{z}; Args{z + 1}];
+                    end
 			end
 		end
 	else
 		disp('Last parameter had no value associated with it, ignoring');
 	end
 end
-
+%keyboard;
 SupportedSurfaceSources = {'fs6', 'mcribs'};
 SupportedSurfaceSources = {'fs6'};
 
