@@ -1,4 +1,4 @@
-function [FSAverageV, FSAverageF, ValueVertexIDX, RGB] = freesurfer_statsurf_loadsurfaces(SurfType, FreesurferSeedType, SurfaceSource)
+function [FSAverageV, FSAverageF, FSAverageCurv, ValueVertexIDX, RGB] = freesurfer_statsurf_loadsurfaces(SurfType, FreesurferSeedType, SurfaceSource)
 
 % load freesurfer average surfaces
 
@@ -23,13 +23,15 @@ Hemis = {'lh', 'rh'};
 	
 	FSAverageV = cell(1, 2);
 	FSAverageF = cell(1, 2);
+    FSAverageCurv = cell(1, 2);
 
 	% the common parts
 	for HemiIDX = 1:length(Hemis)
 		Hemi = Hemis{HemiIDX};
 	
-		[FSAverageV{HemiIDX}, FSAverageF{HemiIDX}] = read_freesurfer_surface(fullfile(FreesurferSubjectsDir, ['fsaverage_' SurfaceSource], 'surf', [Hemi '.' SurfType]));
+		[FSAverageV{HemiIDX}, FSAverageF{HemiIDX}] = freesurfer_read_surf(fullfile(FreesurferSubjectsDir, ['fsaverage_' SurfaceSource], 'surf', [Hemi '.' SurfType]));
 		FSAverageF{HemiIDX} = uint32(FSAverageF{HemiIDX});
+        [FSAverageCurv{HemiIDX}, ~, ~] = freesurfer_read_curv(fullfile(FreesurferSubjectsDir, ['fsaverage_' SurfaceSource], 'surf', [Hemi '.curv']));
 	end
 	
 	ValueVertexIDX = cell(1, length(Hemis));

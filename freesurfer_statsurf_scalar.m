@@ -37,6 +37,9 @@ function [AX, LegAX] = freesurfer_statsurf_scalar(Values, ValuesMask, Freesurfer
 %	'ScalarName' (string): the name of the variable. Used to annotated the
 %	legend.
 %	'PatchProps' (cell): NAME/VALUE pairs of patch properties appended to defaults. See "Patch Properties" in "doc patch".
+%   'BackgroundNoCurv' (logical): affects "background" or non-significant vertices, their colouring:
+%   if true, use solid grey
+%   if false (default), use the average surface curvature
 % NOTES
 % Each element of the vectors in PValues and TValues point to a structure
 % used in the parcellation scheme (FreesurferSeedType). The labels are
@@ -48,11 +51,12 @@ function [AX, LegAX] = freesurfer_statsurf_scalar(Values, ValuesMask, Freesurfer
 
 [options, ...
 NonSignificantColour, CMAPSize, ... 
-FSAverageV, FSAverageF, ValueVertexIDX, ~, ...
+FSAverageV, FSAverageF, FSAverageCurv, ValueVertexIDX, ~, ...
 OtherArgs] = freesurfer_statsurf_checkargs({Values, ValuesMask}, FreesurferSeedType, varargin);
 
 options.ValueLimits = [];
 options.ScalarName = [];
+options.KeepBlueAndRedIfOneSign = false;
 
 for z = 1:2:length(OtherArgs)
 	if length(OtherArgs) >= z + 1
@@ -64,6 +68,8 @@ for z = 1:2:length(OtherArgs)
 					options.ScalarName = OtherArgs{z + 1};
 				case 'valuelimits'
 					options.ValueLimits = OtherArgs{z + 1};
+                case 'keepblueandredifonesign'
+                    options.KeepBlueAndRedIfOneSign = OtherArgs{z + 1};
 				otherwise
 					disp(['Unsupported optional option (ignored): ' OtherArgs{z}]);
 			end
@@ -72,14 +78,14 @@ for z = 1:2:length(OtherArgs)
 		disp('Last parameter had no value associated with it, ignoring');
 	end
 end
-
+%keyboard;
 if isempty(ValuesMask)
 	ValuesMask = cellfun(@(x) (true(size(x))), Values, 'UniformOutput', false);
 end
 
 
 if ~isempty(options.ValueLimits)
-	if options.ValueLimits(1) < 0 && options.ValueLimits(2) > 0
+	if (options.ValueLimits(1) < 0 && options.ValueLimits(2) > 0) || options.KeepBlueAndRedIfOneSign == true
 		[CMAP, ~, CMAPX] = bluewhitered_image(CMAPSize, options.ValueLimits);
 	else
 		CMAP = parula(CMAPSize);
@@ -87,11 +93,12 @@ if ~isempty(options.ValueLimits)
 	end
 else
 	AllValues = cat(2, Values{:});
-	if(all(AllValues(:) > 0) || all(AllValues(:) < 0))
+    
+	if (min(AllValues(:)) < 0 && max(AllValues(:)) > 0) || options.KeepBlueAndRedIfOneSign == true
+        [CMAP, ~, CMAPX] = bluewhitered_image(CMAPSize, AllValues);
+    else
 		CMAP = jet(CMAPSize);
 		CMAPX = linspace(min(AllValues(:)), max(AllValues(:)), CMAPSize);
-	else
-		[CMAP, ~, CMAPX] = bluewhitered_image(CMAPSize, AllValues);
 	end
 end
 %CMAPIMG = permute(repmat(reshape(CMAP(1:end - 2, :), [size(CMAP, 1) - 2, 1, 3]), [1, 50, 1]), [2 1 3]);
@@ -141,6 +148,9 @@ end
 
 options.LegendLabel = options.ScalarName;
 
+if ~options.BackgroundNoCurv
+    FaceVertexCData = freesurfer_statsurf_nonsigwithcurv(FaceVertexCData, FSAverageCurv, NonSignificantColour);
+end
 
 
 %freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData,  FreesurferSeedType, ...

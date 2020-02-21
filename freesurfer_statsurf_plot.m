@@ -3,10 +3,10 @@ function [varargout] = freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVert
 
 % plots the stat surfaces
 
-% 
+%
 % VariablesNeeded = {'ValuesMask', 'FSAverageVInflated', 'FSAverageF', 'FreesurferSeedType', ...
 % 	'LegendLabel', 'CMAPX', 'CMAPIMG', 'LegendXTick', 'LegendXTickLabels', 'MainTitle'};
-% 
+%
 % for z = 1:length(VariablesNeeded)
 % 	if(exist(VariablesNeeded{z}, 'var') ~= 1)
 % 		error(['Variable does not exist: ' VariablesNeeded{z}]);
@@ -66,6 +66,12 @@ if isempty(ValuesMask) && ismember(FreesurferSeedType, {'aparc', 'dkt'})
 	ValuesMask = cellfun(@(x) (true(size(x))), RegionLabels, 'UniformOutput', false);
 end
 
+if options.LargeFonts
+    FontMult = 1.5;
+else
+    FontMult = 1;
+end
+
 Hemis = {'lh', 'rh'};
 
 clf;
@@ -93,7 +99,7 @@ clf;
 AX = zeros(2, 2);
 Patches = zeros(2, 2);
 
-PatchProps = {'EdgeColor', 'none', 'AmbientStrength', 0.8, 'SpecularStrength', 0.4, 'FaceColor', 'interp'};
+PatchProps = {'EdgeColor', 'none', 'AmbientStrength', 0.8, 'SpecularStrength', 0.1, 'FaceColor', 'interp'};
 
 if(~isempty(options.PatchProps))
 	PatchProps = [PatchProps, options.PatchProps];
@@ -185,19 +191,18 @@ if ~isempty(CMAPX) && ~options.NoLegend
 	%LegendXTickLabels = {'0', ['>= ' num2str(LargestEffectSize, '%.3f')]};
 	for z = 1:length(LegendXTickIDX)
 		text(LegendXTickIDX(z), -1, LegendXTickLabels{z}, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'top', ...
-			'Color', options.BackgroundTextColour);
+			'Color', options.BackgroundTextColour, 'FontSize', 18);
 	end
 	if(~isempty(options.LegendLabel))
-		text(0.5, -1.0, options.LegendLabel, 'Color', options.BackgroundTextColour, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'top', 'FontSize', 24, 'FontName', 'Times', 'Units', 'normalized');
+		text(0.5, -1.0, options.LegendLabel, 'Color', options.BackgroundTextColour, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'top', 'FontSize', 24 * FontMult, 'FontName', 'Times', 'Units', 'normalized');
 	end
 end
 
 
 if options.MedialLateralLabels && ~options.HorizontalCompact
-	
 % 	if ~verLessThan('matlab', 'R2017b')
 % 		%disp('here');
-% 		
+%
 % 	elseif ~verLessThan('matlab', 'R2016a')
 % 		if ~options.UseShortLabels
 % 			switch(computer)
@@ -212,12 +217,12 @@ if options.MedialLateralLabels && ~options.HorizontalCompact
 % 			LeftX = -1;
 % 			RightX = 2;
 % 		end
-% 
+%
 % 	else
 % 		LeftX = -0.2;
 % 		RightX = 1.21;
 % 	end
-	
+
 	%if ~options.UseShortLabels
 	%	LeftX = -0.12;
 	%	RightX = 0.02;
@@ -245,26 +250,26 @@ if options.MedialLateralLabels && ~options.HorizontalCompact
 		RightX = -0.04;
 	end
 
-	T = {'EdgeColor', 'none', 'FontSize', 20, 'Color', options.BackgroundTextColour, 'Units', 'normalized', 'HorizontalAlignment', 'center'};
+	T = {'EdgeColor', 'none', 'FontSize', 20 * FontMult, 'Color', options.BackgroundTextColour, 'Units', 'normalized', 'HorizontalAlignment', 'center'};
 	%text( LeftX, 0.275,  'Medial', 'Parent', AX(1, 1), 'Rotation',  90, T{:});
 	%text(RightX, 0.275, 'Lateral', 'Parent', AX(1, 2), 'Rotation', 270, T{:});
-	
+
 	TopLAXPos = get(AX(1, 1), 'Position');
 	TopRAXPos = get(AX(1, 2), 'Position');
 	BotLAXPos = get(AX(2, 1), 'Position');
 	BotRAXPos = get(AX(2, 2), 'Position');
-	
+
 	%annotation('textbox', [0, BotLAXPos(2), TopLAXPos(1), TopLAXPos(2) + TopLAXPos(4) - BotLAXPos(2)], ...
 	%	'String', 'Medial', T{:});
-	T = {'HeadStyle','none','LineStyle', 'none', 'FontSize', 20, 'TextColor', options.BackgroundTextColour, 'HorizontalAlignment', 'center'};
-	T = {'FontSize', 20, 'TextColor', options.BackgroundTextColour, 'HorizontalAlignment', 'center'};
+	T = {'HeadStyle','none','LineStyle', 'none', 'FontSize', 20 * FontMult, 'TextColor', options.BackgroundTextColour, 'HorizontalAlignment', 'center'};
+	T = {'FontSize', 20 * FontMult, 'TextColor', options.BackgroundTextColour, 'HorizontalAlignment', 'center'};
 	XX = [TopLAXPos(1) + LeftX / 2, TopLAXPos(1) + LeftX];
 	YY = repmat((TopLAXPos(2) + TopLAXPos(4) + BotLAXPos(2)) / 2, 1, 2);
 	annotation('textarrow', XX, YY, 'String', 'Medial', T{:}, 'TextRotation', 90);
 	XX = [TopRAXPos(1) + TopRAXPos(3) + RightX, TopRAXPos(1)];
 	YY = repmat((TopRAXPos(2) + TopRAXPos(4) + BotRAXPos(2)) / 2, 1, 2);
 	annotation('textarrow', XX, YY, 'String', 'Lateral', T{:}, 'TextRotation', 270);
-	
+
 end
 
 % now put the PA arrows and LH and RH labels
@@ -320,7 +325,8 @@ annotation('doublearrow', [BottomLeftAXPos(1) + BottomLeftAXPos(3) * ArrowFigWid
 annotation('textbox', [BottomLeftAXPos(1), BottomLeftAXPos(2) - ArrowFigBotNudge, BottomLeftAXPos(3) * ArrowFigWidthProp, AnnotHeight], ...
 	'String', 'A', ...
 	TextProps{:}, ...
-	'HorizontalAlignment', 'right');
+	'HorizontalAlignment', 'right', ...
+    'FontSize', 28);
 annotation('textbox', [BottomLeftAXPos(1) + BottomLeftAXPos(3) * (1 - ArrowFigWidthProp), BottomLeftAXPos(2) - ArrowFigBotNudge, BottomLeftAXPos(3) * ArrowFigWidthProp, AnnotHeight], ...
 	'String', 'P', ...
 	TextProps{:}, ...
@@ -359,22 +365,22 @@ if(~isempty(options.MainTitle))
 		T, ...
 		1 - (TopLeftAXPos(2) + TopLeftAXPos(4))], ...
 		'String', options.MainTitle, ...
-		'Color', options.BackgroundTextColour, 'HorizontalAlignment', 'center', 'FontSize', 18, 'VerticalAlignment', 'middle', 'EdgeColor', 'none');
+		'Color', options.BackgroundTextColour, 'HorizontalAlignment', 'center', 'FontSize', 18 * FontMult, 'VerticalAlignment', 'middle', 'EdgeColor', 'none');
 end
 
 if(~options.NoLabels)
 	if(ismember(lower(FreesurferSeedType), {'aparc', 'dkt'}))
 		if(iscell(ShortRegionLabels))
 			FontWeight = 'bold';
-			FontSize = 10;
+			FontSize = 10 * FontMult;
 		else
 			switch(computer)
 					case {'PCWIN64', 'GLNXA64'}
 						FontWeight = 'normal';
-						FontSize = 8;
+						FontSize = 8 * FontMult;
 					otherwise
 						FontWeight = 'bold';
-						FontSize = 10;
+						FontSize = 10 * FontMult;
 			end
 		end
 
@@ -387,7 +393,7 @@ if(~options.NoLabels)
 			'FontSize', FontSize};
 
 		ArrowProps = {'LineWidth', 2, 'Color', 'w'};
-		
+
 		if (verLessThan('matlab', 'r2017a'))
 			RectProps = {'FaceColor', 'flat', 'EdgeColor', options.LabelColour, 'LineWidth', 2};
 		else
@@ -481,10 +487,10 @@ if(~options.NoLabels)
 							annotation('arrow', Arrows.(Hemi).(F{CurField}){:}, ArrowProps{:});
 						end
 						if(isfield(Rectangles.(Hemi), F{CurField}))
-							
+
 							annotation('rectangle', Rectangles.(Hemi).(F{CurField}){:}, RectProps{:});
 						end
-					end	
+					end
 				end
 			end
 		end

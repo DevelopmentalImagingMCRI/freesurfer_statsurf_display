@@ -39,6 +39,9 @@ function [AX, LegAX] = freesurfer_statsurf_effectsize(EffectSizes, EffectSizesMa
 %	'LargestEffectSize' [1]: the largest effect size to plot, larger values
 %	will be clamped. 1.5 by default
 %	'PatchProps' (cell): NAME/VALUE pairs of patch properties appended to defaults. See "Patch Properties" in "doc patch".
+%   'BackgroundNoCurv' (logical): affects "background" or non-significant vertices, their colouring:
+%   if true, use solid grey
+%   if false (default), use the average surface curvature
 % NOTES
 % Each element of the vectors in PValues and TValues point to a structure
 % used in the parcellation scheme (FreesurferSeedType). The labels are
@@ -50,7 +53,7 @@ function [AX, LegAX] = freesurfer_statsurf_effectsize(EffectSizes, EffectSizesMa
 
 [options, ...
 NonSignificantColour, CMAPSize, ... 
-FSAverageV, FSAverageF, ValueVertexIDX, ~, ...
+FSAverageV, FSAverageF, FSAverageCurv, ValueVertexIDX, ~, ...
 OtherArgs] = freesurfer_statsurf_checkargs({EffectSizes, EffectSizesMask}, FreesurferSeedType, varargin);
 
 options.LargestEffectSize = 1.5;
@@ -118,6 +121,10 @@ else
 end
 
 options.LegendLabel = options.ScalarName;
+
+if ~options.BackgroundNoCurv
+    FaceVertexCData = freesurfer_statsurf_nonsigwithcurv(FaceVertexCData, FSAverageCurv, NonSignificantColour);
+end
 
 %#freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData,  FreesurferSeedType, ...
 %EffectSizesMask, CMAPX, CMAPIMG, MainTitle, SurfType, ScalarName, LegendXTick, LegendXTickLabels, UseShortLabels, NoLabels, NoLegend, MedialLateralLabels);

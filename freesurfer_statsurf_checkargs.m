@@ -1,6 +1,6 @@
 function [options, ...
 NonSignificantColour, CMAPSize, ... % constants
-FSAverageV, FSAverageF, ValueVertexIDX, RGB, ... % from loadsurfaces
+FSAverageV, FSAverageF, FSAverageCurv, ValueVertexIDX, RGB, ... % from loadsurfaces
 OtherArgs] = freesurfer_statsurf_checkargs(Values, FreesurferSeedType, Args)
 
 options.MainTitle = [];
@@ -15,6 +15,8 @@ options.BackgroundTextColour = 'w';
 options.PatchProps = [];
 options.SurfaceSource = 'fs6';
 options.HorizontalCompact = false;
+options.BackgroundNoCurv = false;
+options.LargeFonts = false;
 
 OtherArgs = {};
 
@@ -30,6 +32,8 @@ for z = 1:2:length(Args)
 					options.UseShortLabels = Args{z + 1};
 				case 'nolabels'
 					options.NoLabels = Args{z + 1};
+                case 'largefonts'
+					options.LargeFonts = Args{z + 1};
 				case 'nolegend'
 					options.NoLegend = Args{z + 1};
 				case 'legendnozero'
@@ -46,16 +50,23 @@ for z = 1:2:length(Args)
 					options.SurfaceSource = lower(Args{z + 1});
                 case 'horizontalcompact'
                     options.HorizontalCompact = Args{z + 1};
-				otherwise
-					OtherArgs = [OtherArgs; Args{z}; Args{z + 1}];
+                case 'backgroundnocurv'
+                    options.BackgroundNoCurv = Args{z + 1};
+                otherwise
+                    if iscell(Args{z + 1})
+                        OtherArgs = [OtherArgs; Args{z}; {Args{z + 1}}];
+                    else
+                        OtherArgs = [OtherArgs; Args{z}; Args{z + 1}];
+                    end
 			end
 		end
 	else
 		disp('Last parameter had no value associated with it, ignoring');
 	end
 end
-
+%keyboard;
 SupportedSurfaceSources = {'fs6', 'mcribs'};
+SupportedSurfaceSources = {'fs6'};
 
 if ~ismember(options.SurfaceSource, SupportedSurfaceSources)
 	error('Unsupported seed type');
@@ -147,4 +158,4 @@ end
 NonSignificantColour = repmat(0.25, 1, 3);
 CMAPSize = 256;
 
-[FSAverageV, FSAverageF, ValueVertexIDX, RGB] = freesurfer_statsurf_loadsurfaces(options.SurfType, FreesurferSeedType, options.SurfaceSource);
+[FSAverageV, FSAverageF, FSAverageCurv, ValueVertexIDX, RGB] = freesurfer_statsurf_loadsurfaces(options.SurfType, FreesurferSeedType, options.SurfaceSource);
