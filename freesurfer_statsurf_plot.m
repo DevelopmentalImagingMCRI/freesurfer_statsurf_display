@@ -119,18 +119,18 @@ end
 if ~verLessThan('matlab', 'R2016a')
 	set(AX, 'Clipping', 'off');
 end
-keyboard;
+%keyboard;
 UpNudge = 0.2;
-disp('At start');
-for z = 1:numel(AX)
-    get(AX(z), 'Position')
-end
+% disp('At start');
+% for z = 1:numel(AX)
+%     get(AX(z), 'Position')
+% end
 for z = 1:2
 	AXPos = get(AX(2, z), 'Position');
 	AXPos(2) = AXPos(2) + UpNudge;
 	set(AX(2, z), 'Position', AXPos);
 end
-keyboard;
+%keyboard;
 if options.HorizontalCompact
     for z = 1:2
         AXPos = get(AX(z, 1), 'Position');
@@ -143,15 +143,15 @@ if options.HorizontalCompact
     end
 end
 %keyboard;
-disp('At start');
-for z = 1:numel(AX)
-    get(AX(z), 'Position')
-end
-keyboard;
-if ~verLessThan('matlab', 'R2016a')
-	set(AX, 'Clipping', 'off');
-end
-keyboard;
+% disp('At start');
+% for z = 1:numel(AX)
+%     get(AX(z), 'Position')
+% end
+%keyboard;
+% if ~verLessThan('matlab', 'R2016a')
+% 	set(AX, 'Clipping', 'off');
+% end
+%keyboard;
 DoPositionRectangles = false;
 
 if DoPositionRectangles
@@ -195,7 +195,6 @@ end
 
 if options.MedialLateralLabels && ~options.HorizontalCompact
 	
-<<<<<<< HEAD
 % 	if ~verLessThan('matlab', 'R2017b')
 % 		%disp('here');
 % 		
@@ -219,10 +218,9 @@ if options.MedialLateralLabels && ~options.HorizontalCompact
 % 		RightX = 1.21;
 % 	end
 	
-	if ~options.UseShortLabels
-		LeftX = -0.12;
-		RightX = 0.02;
-=======
+	%if ~options.UseShortLabels
+	%	LeftX = -0.12;
+	%	RightX = 0.02;
 	if ~verLessThan('matlab', 'R2017b')
 		%disp('here');
 		LeftX = -0.5;
@@ -242,7 +240,6 @@ if options.MedialLateralLabels && ~options.HorizontalCompact
 			RightX = 2;
 		end
 
->>>>>>> 0dd626b82637aa766edb0a16a7eca48bbcfade08
 	else
 		LeftX = 0.01;
 		RightX = -0.04;
@@ -501,9 +498,9 @@ if(~options.NoLabels)
 	end
 end
 
-disp('At end');
-for z = 1:numel(AX)
-    get(AX(z), 'Position')
-end
+% disp('At end');
+% for z = 1:numel(AX)
+%     get(AX(z), 'Position')
+% end
 
-keyboard;
+%keyboard;
