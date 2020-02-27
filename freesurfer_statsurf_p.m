@@ -104,9 +104,10 @@ DefaultNegCMAP = DefaultNegCMAP / 2;
 if ~isempty(options.NegColorCMAP)
     if isa(options.NegColorCMAP, 'function_handle')
         NegCMAP = options.NegColorCMAP(CMAPSize);
-    elseif(isnumeric(options.NegColorCMAP))
+    elseif(isnumeric(options.NegColorCMAP) && size(options.NegColorCMAP, 2) == 3)
         NegCMAP = options.NegColorCMAP;
     else
+        warning('Negative colormap had a format problem, using default');
         NegCMAP = DefaultNegCMAP;
     end
 else
@@ -116,9 +117,10 @@ end
 if ~isempty(options.PosColorCMAP)
     if isa(options.PosColorCMAP, 'function_handle')
         PosCMAP = options.PosColorCMAP(CMAPSize);
-    elseif(isnumeric(options.NegColorCMAP))
+    elseif(isnumeric(options.PosColorCMAP) && size(options.PosColorCMAP, 2) == 3)
         PosCMAP = options.PosColorCMAP;
     else
+        warning('Positive colormap had a format problem, using default');
         PosCMAP = DefaultPosCMAP;
     end
 else
