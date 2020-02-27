@@ -5,7 +5,7 @@ function [AX, LegAX] = freesurfer_statsurf_p(PValues, TValues, FreesurferSeedTyp
 %	schemes are supported. The PValues and TValues are 2 element cell
 %	arrays with PValues{1} and TValues{1} giving the p- and t-values for
 %	the left hemisphere and PValues{2} and TValues{2} giving the p- and t-values for
-%	the right hemisphere. Only the sign of the TValues elements are used, such that 
+%	the right hemisphere. Only the sign of the TValues elements are used, such that
 %	the sign of each TValues element determines which group had a greater
 %	mean. FreesurferSeedType is a string that is the parcellation scheme,
 %	see supported values below. The seed type determines the number
@@ -37,8 +37,9 @@ function [AX, LegAX] = freesurfer_statsurf_p(PValues, TValues, FreesurferSeedTyp
 %       'BackgroundNoCurv' (logical): affects "background" or non-significant vertices, their colouring:
 %            if true, use solid grey
 %            if false (default), use the average surface curvature
-%	'NegColorFunc' (function_handle): pointer to a colormap function, such as @hot or @cool that generates a colourmap, for the negative p-values, [optional]
-%	'PosColorFunc' (function_handle): pointer to a colormap function, such as @hot or @cool that generates a colourmap, for the position p-values, [optional]
+%	'NegColorCMAP' (function_handle, N x 3 array): colormap for the negative p-values, [optional], if it is a function_handle the function shall take the number of elements in the colormap (N) and return a N x 3 matrix with rows being RGB tuples
+%	'PosColorCMAP' (function_handle, N x 3 array): colormap for the position p-values, [optional], if it is a function_handle the function shall take the number of elements in the colormap (N) and return a N x 3 matrix with rows being RGB tuples
+%
 % NOTES
 % Each element of the vectors in PValues and TValues point to a structure
 % used in the parcellation scheme (FreesurferSeedType). The labels are
@@ -51,13 +52,13 @@ function [AX, LegAX] = freesurfer_statsurf_p(PValues, TValues, FreesurferSeedTyp
 Values = {PValues, TValues};
 
 [options, ...
-NonSignificantColour, CMAPSize, ... 
+NonSignificantColour, CMAPSize, ...
 FSAverageV, FSAverageF, FSAverageCurv, ValueVertexIDX, ~, ...
 OtherArgs] = freesurfer_statsurf_checkargs(Values, FreesurferSeedType, varargin);
 
 options.GroupLabels = {'Group 1', 'Group 2'};
-options.NegColorFunc = [];
-options.PosColorFunc = [];
+options.NegColorCMAP = [];
+options.PosColorCMAP = [];
 
 for z = 1:2:length(OtherArgs)
 	if length(OtherArgs) >= z + 1
@@ -67,10 +68,10 @@ for z = 1:2:length(OtherArgs)
 			switch(lower(OtherArgs{z}))
 				case 'grouplabels'
 					options.GroupLabels = OtherArgs{z + 1};
-				case 'negcolorfunc'
-					options.NegColorFunc = OtherArgs{z + 1};
-				case 'poscolorfunc'
-					options.PosColorFunc = OtherArgs{z + 1};
+				case 'negcolorcmap'
+					options.NegColorCMAP = OtherArgs{z + 1};
+				case 'poscolorcmap'
+					options.PosColorCMAP = OtherArgs{z + 1};
 				otherwise
 					disp(['Unsupported optional option (ignored): ' OtherArgs{z}]);
 			end
@@ -86,28 +87,47 @@ if(~isempty(options.GroupLabels))
 	end
 end
 
-% non-default colormaps
-if isa(options.NegColorFunc, 'function_handle') && isa(options.PosColorFunc, 'function_handle')
-	NegCMAP = options.NegColorFunc(CMAPSize);
-	PosCMAP = options.PosColorFunc(CMAPSize);
-else
-% default colormap
-	NegCMAP = cool(CMAPSize);
-	PosCMAP = hot(CMAPSize);
-	% crop so that we go from red to yellow so that we dont have white or black
-	PosCMAPIDX = 67:200;
-	T = zeros(size(PosCMAP));
-	for z = 1:3
-		T(:, z) = interp1(PosCMAPIDX, PosCMAP(PosCMAPIDX, z), linspace(min(PosCMAPIDX), max(PosCMAPIDX), CMAPSize));
-	end
-	PosCMAP = T;
-	clear T PosCMAPIDX z;
-	PosCMAP = PosCMAP / 2;
-	NegCMAP = NegCMAP / 2;
+DefaultNegCMAP = cool(CMAPSize);
+DefaultPosCMAP = hot(CMAPSize);
+% crop so that we go from red to yellow so that we dont have white or black
+DefaultPosCMAPIDX = 67:200;
+T = zeros(size(DefaultPosCMAP));
+for z = 1:3
+    T(:, z) = interp1(DefaultPosCMAPIDX, DefaultPosCMAP(DefaultPosCMAPIDX, z), linspace(min(DefaultPosCMAPIDX), max(DefaultPosCMAPIDX), CMAPSize));
 end
+DefaultPosCMAP = T;
+clear T PosCMAPIDX z;
+DefaultPosCMAP = DefaultPosCMAP / 2;
+DefaultNegCMAP = DefaultNegCMAP / 2;
+
+% non-default colormaps
+if ~isempty(options.NegColorCMAP)
+    if isa(options.NegColorCMAP, 'function_handle')
+        NegCMAP = options.NegColorCMAP(CMAPSize);
+    elseif(isnumeric(options.NegColorCMAP))
+        NegCMAP = options.NegColorCMAP;
+    else
+        NegCMAP = DefaultNegCMAP;
+    end
+else
+    NegCMAP = DefaultNegCMAP;
+end
+
+if ~isempty(options.PosColorCMAP)
+    if isa(options.PosColorCMAP, 'function_handle')
+        PosCMAP = options.PosColorCMAP(CMAPSize);
+    elseif(isnumeric(options.NegColorCMAP))
+        PosCMAP = options.PosColorCMAP;
+    else
+        PosCMAP = DefaultPosCMAP;
+    end
+else
+    PosCMAP = DefaultPosCMAP;
+end
+
 %NonSignificantColour = repmat(0.25, 1, 3);
 
-CMAPX = [-1, -0.05 - eps, linspace(-0.05, -1 / CMAPSize, CMAPSize), 0, linspace(1 / CMAPSize, 0.05, CMAPSize), 0.05 + eps, 1];
+CMAPX = [-1, -0.05 - eps, linspace(-0.05, -1 / size(NegCMAP, 1), size(NegCMAP, 1)), 0, linspace(1 / size(PosCMAP, 1), 0.05, size(PosCMAP, 1)), 0.05 + eps, 1];
 CMAP = [NonSignificantColour; NonSignificantColour; NegCMAP; PosCMAP(1, :); PosCMAP; NonSignificantColour; NonSignificantColour];
 
 Hemis = {'lh', 'rh'};
@@ -122,7 +142,7 @@ for HemiIDX = 1:length(Hemis)
 	else
 		CurData = PValues{HemiIDX};
 	end
-	
+
 	clear S;
 	%CurData = rand(size(PValues{HemiIDX})) .* 0.05 .* sign(rand(size(TValues{HemiIDX})) - 0.5);
 	%IDX(IDX == 0) = 1;
@@ -134,7 +154,7 @@ for HemiIDX = 1:length(Hemis)
 	% if structures have no p-values, then they will have NaN, make their
 	% values non-significant
 	C(isnan(C)) = 1;
-	
+
 	M = abs(C) > 1;
 	if(any(M))
 		disp('Warning, p-values outside 0 <= p <= 1, making those p = 1');
@@ -144,7 +164,7 @@ for HemiIDX = 1:length(Hemis)
 	FaceVertexCData{HemiIDX} = zeros(length(C), 3);
 	M = sign(C) < 0;
 	if(any(M))
-		CurCMAPX = [-1, -0.05 - eps, linspace(-0.05, -1 / CMAPSize, CMAPSize), 0];
+		CurCMAPX = [-1, -0.05 - eps, linspace(-0.05, -1 / size(NegCMAP, 1), size(NegCMAP, 1)), 0];
 		CurCMAP = [NonSignificantColour; NonSignificantColour; NegCMAP; NegCMAP(end, :)];
 
 		for z = 1:3
@@ -153,7 +173,7 @@ for HemiIDX = 1:length(Hemis)
 	end
 	M = sign(C) >= 0;
 	if(any(M))
-		CurCMAPX = [0, linspace(1 / CMAPSize, 0.05, CMAPSize), 0.05 + eps, 1];
+		CurCMAPX = [0, linspace(1 / size(PosCMAP, 1), 0.05, size(PosCMAP, 1)), 0.05 + eps, 1];
 		CurCMAP = [PosCMAP(1, :); PosCMAP; NonSignificantColour; NonSignificantColour];
 		%keyboard;
 		for z = 1:3
