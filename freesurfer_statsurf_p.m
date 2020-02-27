@@ -34,9 +34,11 @@ function [AX, LegAX] = freesurfer_statsurf_p(PValues, TValues, FreesurferSeedTyp
 %	'MedialLateralLabels' (logical): whether to place 'Medial' and
 %	'Lateral' on the left and right of the figure, respectively
 %	'PatchProps' (cell): NAME/VALUE pairs of patch properties appended to defaults. See "Patch Properties" in "doc patch".
-%   'BackgroundNoCurv' (logical): affects "background" or non-significant vertices, their colouring:
-%   if true, use solid grey
-%   if false (default), use the average surface curvature
+%       'BackgroundNoCurv' (logical): affects "background" or non-significant vertices, their colouring:
+%            if true, use solid grey
+%            if false (default), use the average surface curvature
+%	'NegColorFunc' (function_handle): pointer to a colormap function, such as @hot or @cool that generates a colourmap, for the negative p-values, [optional]
+%	'PosColorFunc' (function_handle): pointer to a colormap function, such as @hot or @cool that generates a colourmap, for the position p-values, [optional]
 % NOTES
 % Each element of the vectors in PValues and TValues point to a structure
 % used in the parcellation scheme (FreesurferSeedType). The labels are
@@ -54,6 +56,8 @@ FSAverageV, FSAverageF, FSAverageCurv, ValueVertexIDX, ~, ...
 OtherArgs] = freesurfer_statsurf_checkargs(Values, FreesurferSeedType, varargin);
 
 options.GroupLabels = {'Group 1', 'Group 2'};
+options.NegColorFunc = [];
+options.PosColorFunc = [];
 
 for z = 1:2:length(OtherArgs)
 	if length(OtherArgs) >= z + 1
@@ -63,6 +67,10 @@ for z = 1:2:length(OtherArgs)
 			switch(lower(OtherArgs{z}))
 				case 'grouplabels'
 					options.GroupLabels = OtherArgs{z + 1};
+				case 'negcolorfunc'
+					options.NegColorFunc = OtherArgs{z + 1};
+				case 'poscolorfunc'
+					options.PosColorFunc = OtherArgs{z + 1};
 				otherwise
 					disp(['Unsupported optional option (ignored): ' OtherArgs{z}]);
 			end
@@ -78,20 +86,25 @@ if(~isempty(options.GroupLabels))
 	end
 end
 
-%keyboard;
-
-NegCMAP = cool(CMAPSize);
-PosCMAP = hot(CMAPSize);
-% crop so that we go from red to yellow so that we dont have white or black
-PosCMAPIDX = 67:200;
-T = zeros(size(PosCMAP));
-for z = 1:3
-	T(:, z) = interp1(PosCMAPIDX, PosCMAP(PosCMAPIDX, z), linspace(min(PosCMAPIDX), max(PosCMAPIDX), CMAPSize));
+% non-default colormaps
+if isa(options.NegColorFunc, 'function_handle') && isa(options.PosColorFunc, 'function_handle')
+	NegCMAP = options.NegColorFunc(CMAPSize);
+	PosCMAP = options.PosColorFunc(CMAPSize);
+else
+% default colormap
+	NegCMAP = cool(CMAPSize);
+	PosCMAP = hot(CMAPSize);
+	% crop so that we go from red to yellow so that we dont have white or black
+	PosCMAPIDX = 67:200;
+	T = zeros(size(PosCMAP));
+	for z = 1:3
+		T(:, z) = interp1(PosCMAPIDX, PosCMAP(PosCMAPIDX, z), linspace(min(PosCMAPIDX), max(PosCMAPIDX), CMAPSize));
+	end
+	PosCMAP = T;
+	clear T PosCMAPIDX z;
+	PosCMAP = PosCMAP / 2;
+	NegCMAP = NegCMAP / 2;
 end
-PosCMAP = T;
-clear T PosCMAPIDX z;
-PosCMAP = PosCMAP / 2;
-NegCMAP = NegCMAP / 2;
 %NonSignificantColour = repmat(0.25, 1, 3);
 
 CMAPX = [-1, -0.05 - eps, linspace(-0.05, -1 / CMAPSize, CMAPSize), 0, linspace(1 / CMAPSize, 0.05, CMAPSize), 0.05 + eps, 1];

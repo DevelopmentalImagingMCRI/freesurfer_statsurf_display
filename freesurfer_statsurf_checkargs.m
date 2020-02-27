@@ -53,7 +53,7 @@ for z = 1:2:length(Args)
                 case 'backgroundnocurv'
                     options.BackgroundNoCurv = Args{z + 1};
                 otherwise
-                    if iscell(Args{z + 1})
+                    if iscell(Args{z + 1}) || isa(Args{z + 1}, 'function_handle')
                         OtherArgs = [OtherArgs; Args{z}; {Args{z + 1}}];
                     else
                         OtherArgs = [OtherArgs; Args{z}; Args{z + 1}];
