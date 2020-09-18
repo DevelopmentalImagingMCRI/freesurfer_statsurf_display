@@ -1,6 +1,6 @@
 function [AX, LegAX] = freesurfer_statsurf_p(PValues, TValues, FreesurferSeedType, varargin)
 
- % DESCRIPTION
+% DESCRIPTION
 %	Plots p-values on Freesurfer surfaces. The aparc and aparc.a2009s
 %	schemes are supported. The PValues and TValues are 2 element cell
 %	arrays with PValues{1} and TValues{1} giving the p- and t-values for
@@ -25,7 +25,7 @@ function [AX, LegAX] = freesurfer_statsurf_p(PValues, TValues, FreesurferSeedTyp
 % PARAMETER/VALUE PAIRS
 %	'GroupLabels' (cell array of strings) [2]: the two group labels used to
 %	annotate the legend, the groups are called 'Group 1' and 'Group 2' if
-%	this parameter is not given
+%	this parameter is not given. If this is empty, [], then group labels will not be displayed.
 %	'MainTitle' (string): optional title to be placed at the top of the
 %	middle of the plot, if [] this parameter is ignored
 %	'UseShortLabels' (logical): whether to use abbreviated aparc
@@ -187,7 +187,11 @@ end
 options.LegendLabel = '\itp';
 if(~isempty(TValues))
 	LegendXTick = [-0.05, 0, 0.05];
-	LegendXTickLabels = {{'0.05',  ['(' options.GroupLabels{1} ' > ' options.GroupLabels{2} ')']}, '0', {'0.05', ['(' options.GroupLabels{1} ' < ' options.GroupLabels{2} ')']}};
+  if(isempty(options.GroupLabels))
+    LegendXTickLabels = {'0.05', '0', '0.05'};
+  else
+	  LegendXTickLabels = {{'0.05',  ['(' options.GroupLabels{1} ' > ' options.GroupLabels{2} ')']}, '0', {'0.05', ['(' options.GroupLabels{1} ' < ' options.GroupLabels{2} ')']}};
+  end
 else
 	LegendXTick = [0, 0.05];
 	LegendXTickLabels = {'0', '0.05'};
@@ -199,8 +203,6 @@ CMAPIMG = permute(repmat(reshape(CMAP, [size(CMAP, 1), 1, 3]), [1, 50, 1]), [2 1
 if ~options.BackgroundNoCurv
     FaceVertexCData = freesurfer_statsurf_nonsigwithcurv(FaceVertexCData, FSAverageCurv, NonSignificantColour);
 end
-
-%keyboard;
 
 ValuesMask = cellfun(@(x) (x <= 0.05), PValues, 'UniformOutput', false);
 freesurfer_statsurf_plot(FSAverageV, FSAverageF, FaceVertexCData, FreesurferSeedType, ...
